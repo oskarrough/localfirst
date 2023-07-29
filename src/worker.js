@@ -1,5 +1,5 @@
 import { getDb } from './local.js'
-import { pullChannels, pullTracks } from './worker-sync.js'
+import { pullChannels, pullTracks } from './sync.js'
 
 onmessage = async function (event) {
 	console.log('main thread says:', event.data)

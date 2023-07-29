@@ -10,14 +10,12 @@ const getAllTracks = () => getDb().then((db) => db.execA('select * from tracks')
 function component() {
 	const ref = useRef()
 	const promise = usePromise(getAllTracks, [])
-
 	useEffect(() => {
 		const { current } = ref
 		if (current && promise.fulfilled) createTable(current, promise.result)
 	})
-
 	if (promise.fulfilled) return html`<host><table ref=${ref}></table></host>`
-	if (promise.pending) return html`<host>Loading tracks...</host>`
+	if (promise.pending) return html`<host><p>Loading tracks...</p></host>`
 	return html`<host>error: ${promise.result.message}</host>`
 }
 

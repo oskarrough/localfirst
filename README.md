@@ -9,6 +9,7 @@ Vulcan is one way to load sqlite in browser. It also adds persistence, reactivit
 If you don't care about reactivity or merging, you can also use this directly:
 
 - https://sqlite.org/wasm/doc/trunk/index.md
+- https://www.npmjs.com/package/@sqlite.org/sqlite-wasm
 
 A web worker is used to pull changes from the remote database
 
