@@ -1,4 +1,5 @@
-import { sdk } from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk/+esm'
+//import { sdk } from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk/+esm'
+import { sdk } from '@radio4000/sdk'
 import { getDb } from './local.js'
 
 export async function pullChannels() {

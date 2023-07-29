@@ -1,9 +1,5 @@
-// Method A
-// Method B
 import Worker from './worker.js?worker'
 const worker = new Worker()
-
-console.log('worker', worker)
 
 worker.onmessage = function (event) {
 	console.log('worker says:', event.data)
