@@ -1,60 +1,83 @@
-// https://observablehq.com/@tantaman/cr-sqlite-basic-setup
-// https://vlcn.io/docs/js/persistence
+import sqliteWasm from '@vlcn.io/crsqlite-wasm'
+import wasmUrl from '@vlcn.io/crsqlite-wasm/crsqlite.wasm?url'
+// import tblrx from '@vlcn.io/rx-tbl'
+import {nanoid} from 'nanoid'
 
-import initWasm from "@vlcn.io/crsqlite-wasm";
-import wasmUrl from "@vlcn.io/crsqlite-wasm/crsqlite.wasm?url";
-import { nanoid } from "nanoid";
+const schema = `
+  --drop table tracks;
+	create table if not exists channels(id primary key, name, slug unique, created_at);
+	create table if not exists tracks(id primary key, slug not null, url, title, description, created_at, updated_at, foreign key(slug) references channels(slug));
+  create table if not exists counters(id primary key, count integer);
+`
+
+let db
 
 export async function getDb() {
-  const sqlite = await initWasm(() => wasmUrl)
-  return await sqlite.open("my_database.db")
+  // console.log('getdb', db)
+  if (db) return db
+	const sqlite = await sqliteWasm(() => wasmUrl)
+	db = await sqlite.open('my_database.db')
+  // const db = await sqlite.open(":memory:")
+  await db.exec(schema)
+  return db
 }
 
-async function main() {
+async function recordVisit() {
   const db = await getDb()
-
-  // await db.exec('drop table users')
-  await db.exec("CREATE TABLE if not exists users (id PRIMARY KEY, name, created)");
-
-  const rows = await db.execO('select id, name from users')
-  console.log(rows)
-
-  //   const groceries = await db.execO(
-  //     `SELECT "list", "text" FROM "todo" WHERE "list" = 'groceries'`
-  //   );
-  await db.exec(`INSERT INTO users VALUES (?, 'anon', ?)`, [nanoid(), new Date().getTime()])
+  const id = 'visits'
+  const rows = await db.execO(`select count from counters where id = ?`, [id])
+  let count = rows[0]?.count
+  if (!count) {
+    await db.exec(`insert into counters (id, count) values (?, ?)`, [id, 0])
+    count = 0
+  }
+  count = count + 1
+  await db.exec(`update counters set count = ? where id = ?`, [count, id])
+  return count
 }
 
-main()
+recordVisit()
 
-// console.log(await db.exec('select * from users'))
 
-// const list = [
-//   "milk",
-//   "potatos",
-//   "avocado",
-//   "butter",
-//   "cheese",
-//   "broccoli",
-//   "spinach"
-// ];
+// setTimeout(getDb, 2000)
 
-// await Promise.all(
-//   list.map((item) =>
-//     db.exec(`INSERT INTO todo VALUES (?, 'groceries', ?, 0)`, [
-//       nanoid.nanoid(),
-//       item
-//     ])
-// )
-// );
+// Watch for changes aka reactivity
+// const rx = tblrx(db);
+// const disposable = rx.onRange(["channels"], (updateTypes) => {
+//   console.log("channels changed", updateTypes);
+// });
+// disposable(); // unsubscribe the `onRange` listener
+// rx.onAny(() => {
+//   console.log('db had some change');
+// });
+// rx.onPoint("channels", "xyz", (updateTypes) => {
+//   console.log("channel with id xyz changed", updateTypes);
+// });
+// rx.dispose(); // uninstall the rx layer
+
+// globalThis.onbeforeunload = () => {
+//   return db.close()
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // observable version
 
-// sqliteWasm = import("https://esm.sh/@vlcn.io/crsqlite-wasm@0.14.0")
-// sqlite = sqliteWasm.default(
-//   (file) => "https://esm.sh/@vlcn.io/crsqlite-wasm@0.14.0/dist/crsqlite.wasm"
-// )
-// db = sqlite.open(":memory:")
 // created = db.execMany([
 //   `CREATE TABLE IF NOT EXISTS todo_list ("name" primary key, "creation_time");`,
 //   `CREATE TABLE IF NOT EXISTS todo ("id" primary key, "list", "text", "complete");`
@@ -130,19 +153,19 @@ main()
 //   ]);
 
 //   return db2;
-  // }
+// }
 
-  // merged = {
-  //   await db2.tx(async (tx) => {
-  //     for (const cs of changesets) {
-  //       await tx.exec(
-  //         `INSERT INTO crsql_changes VALUES (?, ?, ?, ?, ?, ?, ?)`,
+// merged = {
+//   await db2.tx(async (tx) => {
+//     for (const cs of changesets) {
+//       await tx.exec(
+//         `INSERT INTO crsql_changes VALUES (?, ?, ?, ?, ?, ?, ?)`,
 //         cs
 //       );
 //     }
 //   });
 //   return OK;
-  // }
+// }
 
 // {
 //   merged == OK;

@@ -9,9 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radio4000/sdk": "^0.4.2",
     "@vlcn.io/crsqlite-wasm": "^0.14.0",
+    "@vlcn.io/rx-tbl": "^0.13.0",
+    "atomico": "^1.72.0",
     "lit": "^2.7.6",
-    "nanoid": "^4.0.2"
+    "nanoid": "^4.0.2",
+    "simple-datatables": "^7.3.0"
   },
   "devDependencies": {
     "vite": "^4.4.5"
