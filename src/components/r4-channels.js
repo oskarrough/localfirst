@@ -1,7 +1,7 @@
 import { c, html, css, usePromise, useRef, useEffect } from 'atomico'
-import { getDb } from './local.js'
 import { DataTable } from 'simple-datatables'
-import humanizedDate from './humanized-date.js'
+import { getDb } from '../local.js'
+import humanizedDate from '../humanized-date.js'
 
 // Note, we use execA to get an array of columns, not objects.
 const getChannels = () => getDb().then((db) => db.execA('select * from channels'))

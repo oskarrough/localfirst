@@ -1,5 +1,5 @@
 import { c, html, usePromise } from 'atomico'
-import { getDb } from './local.js'
+import { getDb } from '../local.js'
 
 async function getCount() {
 	const db = await getDb()
