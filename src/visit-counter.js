@@ -14,9 +14,5 @@ function component() {
   return html`<host>error: ${promise.result.message}</host>`
 }
 
-// component.props = {
-//   count: Number,
-// }
-
 customElements.define('visit-counter', c(component))
 

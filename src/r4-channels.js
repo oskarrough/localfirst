@@ -5,8 +5,6 @@ import humanizedDate from './humanized-date.js'
 
 // Note, we use execA to get an array of columns, not objects.
 const getChannels = () => getDb().then((db) => db.execA('select * from channels'))
-const getAllTracks = () => getDb().then((db) => db.execA('select * from tracks'))
-// const getTracks = (slug) => getDb().then((db) => db.execA('select * from tracks where slug = ?', [slug]))
 
 function component() {
   const ref = useRef()
@@ -14,17 +12,12 @@ function component() {
 
   useEffect(() => {
     const {current} = ref
-    // console.log('<r4-channels>', current, promise)
     if (current && promise.fulfilled) createTable(current, promise.result)
   })
 
   if (promise.fulfilled) return html`<host><table ref=${ref}></table></host>`
   if (promise.pending) return html`<host>loading</host>`
   return html`<host>error: ${promise.result.message}</host>`
-}
-
-component.props = {
-  channels: Object,
 }
 
 customElements.define('r4-channels', c(component))

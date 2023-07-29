@@ -1,4 +1,4 @@
-import { c, html, css, usePromise, useRef, useEffect } from 'atomico'
+import { c, html, usePromise, useRef, useEffect } from 'atomico'
 import { getDb } from './local.js'
 import {DataTable} from 'simple-datatables'
 import humanizedDate from './humanized-date.js'
@@ -29,6 +29,7 @@ function createTable(tableElement, rows) {
     perPage: 50,
     columns: [
       {select: 0, hidden: true},
+      // {select: 1},
       {select: 2, hidden: true},
       {select: 4, hidden: true},
       {
@@ -37,19 +38,6 @@ function createTable(tableElement, rows) {
       },
       {select: 6, type: 'date', format: 'ISO_8601', 
         render: (data) => humanizedDate(data)},
-      // {select: 1, render(data) {
-      //   return `<a href="#">${data[0].data}</a>`
-      // }},
-      // {
-      //   // select the fourth column ...
-      //   select: 3,
-      //   // ... let the instance know we have datetimes in it ...
-      //   type: 'date',
-      //   // ... pass the correct datetime format ...
-      //   format: 'YYYY/DD/MM',
-      //   // ... sort it ...
-      //   sort: 'desc',
-      // },
     ],
     data: {
       headings: ['Id', 'Channel', 'URL', 'Title', 'Description', 'Created', 'Updated'],
