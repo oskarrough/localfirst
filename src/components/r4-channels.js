@@ -35,19 +35,16 @@ function createTable(tableElement, rows) {
 				},
 			},
 			{
-				// select the fourth column ...
 				select: 3,
-				// ... let the instance know we have datetimes in it ...
 				type: 'date',
-				// ... pass the correct datetime format ...
 				// format: 'MMYYYY/DD/MM',
-				// ... sort it ...
 				sort: 'desc',
 				render: (data) => humanizedDate(data),
+				cellClass: 'date',
 			},
 		],
 		data: {
-			headings: ['Id', 'Name', 'Slug', 'Created Date'],
+			headings: ['Id', 'Name', 'Slug', 'Created'],
 			data: rows,
 		},
 	})

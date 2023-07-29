@@ -14,3 +14,8 @@ body {
 a:any-link {
 	color: var(--blue);
 }
+
+td.date {
+	min-width: 6rem;
+	text-align: right;
+}

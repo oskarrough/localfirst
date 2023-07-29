@@ -29,7 +29,6 @@ function createTable(tableElement, rows) {
 		perPage: 10,
 		columns: [
 			{ select: 0, hidden: true },
-			// {select: 1},
 			{ select: 2, hidden: true },
 			{ select: 4, hidden: true },
 			{
@@ -38,8 +37,9 @@ function createTable(tableElement, rows) {
 				format: 'ISO_8601',
 				sort: 'desc',
 				render: (data) => humanizedDate(data),
+				cellClass: 'date'
 			},
-			{ select: 6, type: 'date', format: 'ISO_8601', render: (data) => humanizedDate(data) },
+			{ select: 6, type: 'date', format: 'ISO_8601', render: (data) => humanizedDate(data), cellClass: 'date' },
 		],
 		data: {
 			headings: ['Id', 'Channel', 'URL', 'Title', 'Description', 'Created', 'Updated'],
