@@ -15,7 +15,8 @@
     "atomico": "^1.72.0",
     "lit": "^2.7.6",
     "nanoid": "^4.0.2",
-    "simple-datatables": "^7.3.0"
+    "simple-datatables": "^7.3.0",
+    "valibot": "^0.5.0"
   },
   "devDependencies": {
     "vite": "^4.4.5"

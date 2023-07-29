@@ -2,24 +2,30 @@ import sqliteWasm from '@vlcn.io/crsqlite-wasm'
 import wasmUrl from '@vlcn.io/crsqlite-wasm/crsqlite.wasm?url'
 
 const schema = `
-  --drop table tracks;
 	create table if not exists channels(id primary key, name, slug unique, created_at);
 	create table if not exists tracks(id primary key, slug not null, url, title, description, created_at, updated_at, foreign key(slug) references channels(slug) on delete cascade);
   create table if not exists counters(id primary key, count integer);
-
   --select crsql_as_crr('channels');
   --select crsql_as_crr('tracks');
 `
 
+// We reuse this function to get the database connection.
 let db
+let initializing = false
 
 export async function getDb() {
-  if (db) return db
-	const sqlite = await sqliteWasm(() => wasmUrl)
-  // db = await sqlite.open(":memory:")
-	db = await sqlite.open('my_database.db')
-  await db.exec(schema)
-  return db
+  // console.log('getDb', {db: !!db, initializing: !!initializing})
+	if (db) return db
+	if (initializing)  return initializing
+
+	initializing = (async () => {
+		const sqlite = await sqliteWasm(() => wasmUrl)
+		db = await sqlite.open('my_database.db')
+		await db.exec(schema)
+		return db
+	})()
+
+	return initializing
 }
 
 // Watch for changes aka reactivity
@@ -40,4 +46,3 @@ export async function getDb() {
 // globalThis.onbeforeunload = () => {
 //   return db.close()
 // }
-

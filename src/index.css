@@ -1,17 +1,16 @@
-
 :root {
-  --blue: hsl(210, 100%, 50%);
-  --green: hsl(144, 86%, 33%);
+	--blue: hsl(210, 100%, 50%);
+	--green: hsl(144, 86%, 33%);
 
-  font-family: system-ui, sans-serif;
-  font-size: 14px;
-
+	font-family: system-ui, sans-serif;
+	font-size: 14px;
 }
 
 body {
-  margin: 1rem;
+	margin: 1rem;
+	overflow-y: scroll;
 }
 
 a:any-link {
-  color: var(--blue);
+	color: var(--blue);
 }
