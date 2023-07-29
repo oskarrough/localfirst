@@ -1,11 +1,10 @@
 import { sdk } from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk/+esm'
 import { getDb } from './local.js'
 
-const db = await getDb()
-
 export async function pullChannels() {
 	const { data, error } = await sdk.channels.readChannels()
 	if (error || !data?.length) return []
+	const db = await getDb()
 	await db.exec('begin transaction')
 	const promises = data.map((c) =>
 		db.exec(
@@ -27,6 +26,7 @@ export async function pullChannels() {
 export async function pullTracks({ slug }) {
 	const { data, error } = await sdk.channels.readChannelTracks(slug)
 	if (error || !data?.length) return
+	const db = await getDb()
 	const promises = data.map((x) =>
 		db.exec(
 			`
