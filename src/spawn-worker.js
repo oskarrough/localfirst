@@ -11,7 +11,7 @@ worker.onmessage = function (event) {
 }
 worker.onerror = function (event) {
 	console.log('error', event)
-	// console.error(event.error)
 }
 
 worker.postMessage(`hey worker, let's get syncing`)
+

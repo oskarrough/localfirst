@@ -1,6 +1,10 @@
 import { getDb } from './local.js'
 import { pullChannels, pullTracks } from './sync.js'
 
+/**
+ * This worker is a demo using SQLite3 via indexeddb a worker thread.
+ */
+
 onmessage = async function (event) {
 	console.log('main thread says:', event.data)
 }

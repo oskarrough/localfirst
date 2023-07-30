@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@radio4000/sdk": "^0.4.2",
+    "@sqlite.org/sqlite-wasm": "^3.42.0-build4",
     "@vlcn.io/crsqlite-wasm": "^0.14.0",
     "@vlcn.io/rx-tbl": "^0.13.0",
     "atomico": "^1.72.0",
