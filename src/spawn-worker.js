@@ -14,4 +14,3 @@ worker.onerror = function (event) {
 }
 
 worker.postMessage(`hey worker, let's get syncing`)
-

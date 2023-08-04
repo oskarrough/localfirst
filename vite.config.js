@@ -1,5 +1,8 @@
+import atomico from '@atomico/vite'
+
 /** @type {import('vite').UserConfig} */
 export default {
+	plugins: [atomico()],
 	server: {
 		headers: {
 			'Cross-Origin-Opener-Policy': 'same-origin',

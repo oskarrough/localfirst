@@ -1,7 +1,7 @@
 import { c, html, usePromise, useRef, useEffect } from 'atomico'
-import { getDb } from '../local.js'
 import { DataTable } from 'simple-datatables'
-import humanizedDate from '../humanized-date.js'
+import { getDb } from '../local.js'
+import humanizedDate from '../utils/humanized-date.js'
 
 // Note, we use execA to get an array of columns, not objects.
 const getAllTracks = () => getDb().then((db) => db.execA('select * from tracks'))
@@ -19,7 +19,7 @@ function component() {
 	return html`<host>error: ${promise.result.message}</host>`
 }
 
-customElements.define('r4-tracks', c(component))
+customElements.define('r4-local-tracks', c(component))
 
 function createTable(tableElement, rows) {
 	return new DataTable(tableElement, {
