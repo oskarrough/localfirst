@@ -2,9 +2,10 @@ Experimenting with sqlite in a browser via wasm and web workers.
 
 Vulcan is one way to load sqlite in browser. It also adds persistence, reactivity and merging of two (or more) databases.
 
-- https://observablehq.com/@tantaman/cr-sqlite-basic-setup
+- https://vlcn.io/docs/js/wasm
 - https://vlcn.io/docs/js/persistence
 - https://vlcn.io/docs/js/reactivity
+- https://observablehq.com/@tantaman/cr-sqlite-basic-setup
 - https://github.com/rhashimoto/wa-sqlite
 
 If you don't care about reactivity or merging, you can also use this directly:
