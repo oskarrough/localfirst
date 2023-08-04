@@ -37,7 +37,7 @@ function createTable(tableElement, rows) {
 				render: (data) => humanizedDate(data),
 				cellClass: 'date'
 			},
-			{ select: 6, type: 'date', format: 'ISO_8601', render: (data) => humanizedDate(data), cellClass: 'date' },
+			{ select: 6, type: 'date', format: 'ISO_8601', render: (data) => humanizedDate(data), cellClass: 'date', sort: 'desc' },
 		],
 		data: {
 			headings: ['Id', 'Channel', 'URL', 'Title', 'Description', 'Created', 'Updated'],
