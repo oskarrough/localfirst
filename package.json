@@ -9,17 +9,31 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@atomico/router": "^2.0.1",
+    "@radio4000/components": "^0.1.16",
     "@radio4000/sdk": "^0.4.2",
-    "@sqlite.org/sqlite-wasm": "^3.42.0-build4",
+    "@sctlib/mwc": "^0.1.0",
+    "@sqlite.org/sqlite-wasm": "^3.42.0-build6",
     "@vlcn.io/crsqlite-wasm": "^0.14.0",
     "@vlcn.io/rx-tbl": "^0.13.0",
     "atomico": "^1.72.0",
-    "lit": "^2.7.6",
+    "lit": "^2.8.0",
+    "matrix-js-sdk": "^27.1.0",
     "nanoid": "^4.0.2",
     "simple-datatables": "^7.3.0",
-    "valibot": "^0.5.0"
+    "valibot": "^0.9.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
-    "vite": "^4.4.5"
+    "@atomico/vite": "^2.11.0",
+    "eslint": "^8.46.0",
+    "vite": "^4.4.8"
+  },
+  "prettier": {
+    "bracketSpacing": false,
+    "singleQuote": true,
+    "semi": false,
+    "useTabs": true,
+    "printWidth": 120
   }
 }
