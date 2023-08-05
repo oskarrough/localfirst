@@ -1,6 +1,6 @@
 import {c, html, usePromise, useRef, useEffect} from 'atomico'
 import {DataTable} from 'simple-datatables'
-import {getDb} from '../local.js'
+import {getDb} from '../local-db.js'
 import humanizedDate from '../utils/humanized-date.js'
 
 // Note, we use execA to get an array of columns, not objects.
@@ -15,7 +15,7 @@ function component() {
 		if (current && promise.fulfilled) createTable(current, promise.result)
 	})
 	if (promise.fulfilled) return html`<host><table ref=${ref}></table></host>`
-	if (promise.pending) return html`<host><p>Loading tracks...</p></host>`
+	if (promise.pending) return html`<host><p>Loading...</p></host>`
 	return html`<host>error: ${promise.result.message}</host>`
 }
 
@@ -45,9 +45,8 @@ function createTable(tableElement, rows) {
 				select: 6,
 				type: 'date',
 				format: 'ISO_8601',
-				// render: (data) => humanizedDate(data),
+				render: (data) => humanizedDate(data),
 				cellClass: 'date',
-				sort: 'desc',
 			},
 		],
 	})

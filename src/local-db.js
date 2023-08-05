@@ -1,39 +1,36 @@
-import {sdk} from '@radio4000/sdk'
-import {readTracks} from './r4-matrix-sdk.js'
-import {getDb} from './local.js'
 import {ChannelSchema, TrackSchema} from './types.js'
+import sqliteWasm, {DB} from '@vlcn.io/crsqlite-wasm'
+import wasmUrl from '@vlcn.io/crsqlite-wasm/crsqlite.wasm?url'
 
 /** @typedef {import('./types.js').Channel} Channel */
 /** @typedef {import('./types.js').Track} Track */
 
-export async function pullChannels() {
-	const {data, error} = await sdk.channels.readChannels()
-	if (!error && data?.length) {
-		insertChannels(data)
-	}
+const schema = `
+	create table if not exists channels(id primary key, name, slug unique, created_at);
+	create table if not exists tracks(id primary key, slug not null, url, title, description, created_at, updated_at, foreign key(slug) references channels(slug) on delete cascade);
+  create table if not exists counters(id primary key, count integer);
+  --select crsql_as_crr('channels');
+  --select crsql_as_crr('tracks');
+`
+
+// Ensure we only open the database once
+const dbPromise = (async () => {
+	const sqlite = await sqliteWasm(() => wasmUrl)
+	const db = await sqlite.open('my.db')
+	await db.exec(schema)
+	return db
+})()
+export async function getDb() {
+	return dbPromise
 }
 
-/** @param {string} slug */
-export async function pullTracks(slug) {
-	const {data, error} = await sdk.channels.readChannelTracks(slug)
-	if (error || !data?.length) return
-	const tracks = data?.map((t) => ({...t, slug}))
-	insertTracks(tracks)
-}
-
-/** @param {string} roomId */
-export async function pullMatrixTracks(roomId) {
-	return insertTracks(await readTracks(roomId))
-}
-
-/** Upserts a list of channels to the local database
+/** Upserts a list of (valid) channels to the local database
  * @param {Array<Channel>} data
  */
 export async function insertChannels(data) {
-	const valid = data.filter((t) => ChannelSchema.safeParse(t).success)
-	// console.log(`${valid.length}/${data.length} valid channels`)
 	const db = await getDb()
-	// await db.exec('begin transaction')
+	const valid = data.filter((t) => ChannelSchema.safeParse(t).success)
+	console.log(` ↓ ${valid.length} channels`)
 	const promises = valid.map((c) =>
 		db.exec(
 			`
@@ -48,17 +45,15 @@ export async function insertChannels(data) {
 		)
 	)
 	await Promise.all(promises)
-	// await db.exec('commit')
 }
 
-/** Upserts a list of tracks into the local database
+/** Upserts a list of (valid) tracks into the local database
  * @param {Array<Track>} tracks
  */
 export async function insertTracks(tracks) {
 	const db = await getDb()
 	const valid = tracks.filter((t) => TrackSchema.safeParse(t).success)
-	//const invalid = tracks.filter((t) => !TrackSchema.safeParse(t).success)
-	//console.log(`${valid.length}/${tracks.length} valid tracks`, {invalid})
+	console.log(` ↓ ${valid.length} tracks from ${tracks[0].slug}`)
 	try {
 		const promises = valid.map((x) =>
 			db.exec(
@@ -80,3 +75,5 @@ export async function insertTracks(tracks) {
 		console.log(err)
 	}
 }
+
+function insertTrack(track) {}

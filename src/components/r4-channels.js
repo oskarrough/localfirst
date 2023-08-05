@@ -1,6 +1,6 @@
 import { c, html, usePromise, useRef, useEffect } from 'atomico'
 import { DataTable } from 'simple-datatables'
-import { getDb } from '../local.js'
+import { getDb } from '../local-db.js'
 import humanizedDate from '../utils/humanized-date.js'
 
 // Note, we use execA to get an array of columns, not objects.
@@ -16,7 +16,7 @@ function component() {
 	})
 
 	if (promise.fulfilled) return html`<host><table ref=${ref}></table></host>`
-	if (promise.pending) return html`<host>loading</host>`
+	if (promise.pending) return html`<host><p>Loading...</p></host>`
 	return html`<host>error: ${promise.result.message}</host>`
 }
 

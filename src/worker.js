@@ -1,34 +1,31 @@
-import {getDb} from './local.js'
-import {pullChannels, pullTracks, pullMatrixTracks} from './worker-sync.js'
+import {getDb} from './local-db.js'
 import {secondsSince} from './utils/seconds-since.js'
+import R4Remote from './remotes/r4.js'
+import MatrixRemote from './remotes/matrix.js'
 
-const db = await getDb()
 const ROOM_ID = '!aGwogbKehPpaWCGFIf:matrix.org'
-
-/**
- * This worker is a demo using SQLite3 via indexeddb a worker thread.
- */
 
 onmessage = async function (event) {
 	console.log('main thread says:', event.data)
+	if (event.data === 'sync') sync()
 }
 
-const t0 = performance.now()
+async function sync() {
+	postMessage('syncing...')
 
-// Sync channels
-await pullChannels()
+	const t0 = performance.now()
+	const db = await getDb()
 
-// Sync tracks from the channels.
-/** @type {Array<import('./types.js').Channel>} */
-const channels = await db.execO('select * from channels')
-await db.exec('begin transaction')
-postMessage(`syncing ${channels.length} channels incl. their tracks`)
-await Promise.all(channels.map((channel) => pullTracks(channel.slug)))
-await db.exec('commit')
-postMessage(`r4sdk sync done in ${secondsSince(t0)}s`)
+	let remotes = [
+		new R4Remote(db),
+		new MatrixRemote(db, {roomId: ROOM_ID})
+	]
 
-// Sync tracks from a certain matrix room.
-await db.exec('begin transaction')
-await pullMatrixTracks(ROOM_ID)
-await db.exec('commit')
-postMessage(`matrix sync done in ${secondsSince(t0)}s`)
+	await db.exec('begin transaction')
+	await Promise.all(remotes.map((r) => r.pull()))
+	await db.exec('commit')
+
+	postMessage(`sync done in ${secondsSince(t0)}s`)
+	
+	// await remotes[0].push()
+}
