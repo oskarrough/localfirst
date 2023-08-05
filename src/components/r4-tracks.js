@@ -1,6 +1,6 @@
-import { c, html, usePromise, useRef, useEffect } from 'atomico'
-import { DataTable } from 'simple-datatables'
-import { getDb } from '../local.js'
+import {c, html, usePromise, useRef, useEffect} from 'atomico'
+import {DataTable} from 'simple-datatables'
+import {getDb} from '../local.js'
 import humanizedDate from '../utils/humanized-date.js'
 
 // Note, we use execA to get an array of columns, not objects.
@@ -11,7 +11,7 @@ function component() {
 	const ref = useRef()
 	const promise = usePromise(getAllTracks, [])
 	useEffect(() => {
-		const { current } = ref
+		const {current} = ref
 		if (current && promise.fulfilled) createTable(current, promise.result)
 	})
 	if (promise.fulfilled) return html`<host><table ref=${ref}></table></host>`
@@ -23,25 +23,32 @@ customElements.define('r4-local-tracks', c(component))
 
 function createTable(tableElement, rows) {
 	return new DataTable(tableElement, {
+		data: {
+			headings: ['Id', 'Channel', 'URL', 'Title', 'Description', 'Created', 'Updated'],
+			data: rows,
+		},
 		perPageSelect: [10, 50, 100, 200, 500, 1000, 4000],
 		perPage: 10,
 		columns: [
-			{ select: 0, hidden: true },
-			{ select: 2, hidden: true },
-			{ select: 4, hidden: true },
+			{select: 0, hidden: true},
+			{select: 2, hidden: true},
+			{select: 4, hidden: true},
 			{
 				select: 5,
 				type: 'date',
 				format: 'ISO_8601',
 				sort: 'desc',
-				render: (data) => humanizedDate(data),
-				cellClass: 'date'
+				// render: (data) => humanizedDate(data),
+				cellClass: 'date',
 			},
-			{ select: 6, type: 'date', format: 'ISO_8601', render: (data) => humanizedDate(data), cellClass: 'date', sort: 'desc' },
+			{
+				select: 6,
+				type: 'date',
+				format: 'ISO_8601',
+				// render: (data) => humanizedDate(data),
+				cellClass: 'date',
+				sort: 'desc',
+			},
 		],
-		data: {
-			headings: ['Id', 'Channel', 'URL', 'Title', 'Description', 'Created', 'Updated'],
-			data: rows,
-		},
 	})
 }

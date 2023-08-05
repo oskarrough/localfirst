@@ -11,8 +11,8 @@
   "dependencies": {
     "@atomico/router": "^2.0.1",
     "@radio4000/components": "^0.1.16",
-    "@radio4000/sdk": "^0.4.2",
-    "@sctlib/mwc": "^0.1.0",
+    "@radio4000/sdk": "^0.4.3",
+    "@sctlib/mwc": "^0.1.2",
     "@sqlite.org/sqlite-wasm": "^3.42.0-build6",
     "@vlcn.io/crsqlite-wasm": "^0.14.0",
     "@vlcn.io/rx-tbl": "^0.13.0",

@@ -1,4 +1,4 @@
-import sqliteWasm from '@vlcn.io/crsqlite-wasm'
+import sqliteWasm, {DB} from '@vlcn.io/crsqlite-wasm'
 import wasmUrl from '@vlcn.io/crsqlite-wasm/crsqlite.wasm?url'
 
 const schema = `
@@ -10,13 +10,19 @@ const schema = `
 `
 
 // We reuse this function to get the database connection.
+/** @type {DB} */
 let db
-let initializing = false
 
+/** @type {any} */
+let initializing = undefined
+
+/**
+ * @returns {Promise<DB>}
+ */
 export async function getDb() {
-  // console.log('getDb', {db: !!db, initializing: !!initializing})
+	// console.log('getDb', {db: !!db, initializing: !!initializing})
 	if (db) return db
-	if (initializing)  return initializing
+	if (initializing) return initializing
 
 	initializing = (async () => {
 		const sqlite = await sqliteWasm(() => wasmUrl)

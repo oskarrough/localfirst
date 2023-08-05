@@ -11,8 +11,13 @@ const dateTimeFormat = new Intl.DateTimeFormat('en', {
 	year: 'numeric',
 })
 
-const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' })
+const rtf = new Intl.RelativeTimeFormat('en', {numeric: 'auto'})
 
+/**
+ *
+ * @param {number} timestamp
+ * @returns {string}
+ */
 export default function humanizedDate(timestamp) {
 	// Ensuring the timestamp is valid
 	if (isNaN(timestamp)) {

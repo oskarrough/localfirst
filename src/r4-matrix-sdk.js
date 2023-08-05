@@ -1,9 +1,10 @@
 import api from '@sctlib/mwc/api'
 
-/** @typedef {import('./types').Track} Track */
+/** @typedef {import('./types.js').Track} Track */
 
 // Mock local storage required in @sctlib/mwc
 if (!globalThis.localStorage) {
+	// @ts-ignore
 	globalThis.localStorage = {
 		getItem(key) {
 			return this.storage[key]
@@ -25,9 +26,11 @@ const EVENT_TYPE_TRACK = 'org.r4.track'
 
 /**
  * Reads all tracks from a matrix room and returns them, serialized
- * @returns {Array<Track>}
+ * @param {string} roomId
+ * @returns {Promise<Array<Track>>}
  */
 export async function readTracks(roomId) {
+	let tracks = []
 	try {
 		await api.joinRoom(roomId)
 		const res = await api.getRoomMessages({
@@ -36,14 +39,15 @@ export async function readTracks(roomId) {
 			params: [['filter', JSON.stringify({types: [EVENT_TYPE_TRACK]})]],
 		})
 		if (res.error) throw res
-		const tracks = res.chunk.map(serializeMatrixTrack)
-		return tracks
+		tracks = res.chunk.map(serializeMatrixTrack)
 	} catch (err) {
 		if (err.errcode === 'M_FORBIDDEN') {
 			await api.joinRoom(roomId)
 			throw new Error('You are not allowed to read this room')
 		}
 		console.log(err)
+	} finally {
+		return tracks
 	}
 }
 
@@ -69,7 +73,7 @@ export async function createTrack(roomId, track) {
 
 /**
  * Takes a matrix event of type `org.r4.track` and returns a R4Track object.
- * @param {object} matrixEvent
+ * @param {MatrixTrackEvent} matrixEvent
  * @returns {Track}
  */
 function serializeMatrixTrack(matrixEvent) {
@@ -82,3 +86,15 @@ function serializeMatrixTrack(matrixEvent) {
 		description: matrixEvent.content.description || `Added by ${matrixEvent.sender}`,
 	}
 }
+
+/**
+ * @typedef {object} MatrixTrackEvent
+ * @property {string} event_id
+ * @property {string} room_id
+ * @property {string} sender
+ * @property {string} origin_server_ts
+ * @property {object} content
+ * @property {string} content.url
+ * @property {string} content.title
+ * @property {string} [content.description]
+ */
