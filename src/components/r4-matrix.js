@@ -1,20 +1,19 @@
 import {c, html, useState} from 'atomico'
 import {createTrack, readTracks} from '../r4-matrix-sdk.js'
-import api from '@sctlib/mwc/api'
+import matrix from '@sctlib/mwc/api'
 
 function component({roomId, roomAlias}) {
 	const [tracks, setTracks] = useState([])
 
-	const join = () => api.joinRoom(roomId)
-	const read = () => readTracks(roomId).then(setTracks)//.then(insertTracks(tracks))
+	const join = () => matrix.joinRoom(roomId)
+	const read = () => readTracks(roomId).then(setTracks) //.then(insertTracks(tracks))
 	const create = (event) => {
 		event.preventDefault()
-		console.log('submit track', event.detail)
 		const fd = new FormData(event.target)
 		createTrack(roomId, {
-			title: fd.get('title'),
 			slug: roomId,
 			url: fd.get('url'),
+			title: fd.get('title'),
 			description: fd.get('description'),
 		})
 	}
@@ -25,14 +24,12 @@ function component({roomId, roomAlias}) {
 		<hr />
 		<form onsubmit=${create}>
 			<label for="url">URL</label>
-			<input name="url" type="url" required id="url"  value="https://www.youtube.com/watch?v=v6B9kXp7fVc" /><br />
+			<input name="url" type="url" required id="url" value="https://www.youtube.com/watch?v=v6B9kXp7fVc" /><br />
 			<label for="title">Title</label>
-			<input name="title" type="text" required id="title"  value=${`Test track ${new Date().getTime()}`} /><br />
+			<input name="title" type="text" required id="title" value=${`Test track ${new Date().getTime()}`} /><br />
 			<label for="description">Description</label>
 			<textarea name="description" id="description"></textarea><br />
-			<button type="submit" name="submit" id="submit" role="primary">
-				Add track to matrix
-			</button>
+			<button type="submit" name="submit" id="submit" role="primary">Add track to matrix</button>
 		</form>
 		<hr />
 		<matrix-room profile-id=${roomAlias}></matrix-room>

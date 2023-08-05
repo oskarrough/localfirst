@@ -1,25 +1,6 @@
-import api from '@sctlib/mwc/api'
+import matrix from '@sctlib/mwc/api'
 
 /** @typedef {import('./types.js').Track} Track */
-
-// Mock local storage required in @sctlib/mwc
-if (!globalThis.localStorage) {
-	// @ts-ignore
-	globalThis.localStorage = {
-		getItem(key) {
-			return this.storage[key]
-		},
-		setItem(key, val) {
-			this.storage = {...this.storage, [key]: val}
-		},
-		removeItem(key) {
-			let storage = {...this.storage}
-			delete storage[key]
-			this.storage = storage
-		},
-		storage: {},
-	}
-}
 
 // A custom event type for our track events in Matrix
 const EVENT_TYPE_TRACK = 'org.r4.track'
@@ -32,8 +13,8 @@ const EVENT_TYPE_TRACK = 'org.r4.track'
 export async function readTracks(roomId) {
 	let tracks = []
 	try {
-		await api.joinRoom(roomId)
-		const res = await api.getRoomMessages({
+		await matrix.joinRoom(roomId)
+		const res = await matrix.getRoomMessages({
 			roomId,
 			limit: 5000,
 			params: [['filter', JSON.stringify({types: [EVENT_TYPE_TRACK]})]],
@@ -42,7 +23,7 @@ export async function readTracks(roomId) {
 		tracks = res.chunk.map(serializeMatrixTrack)
 	} catch (err) {
 		if (err.errcode === 'M_FORBIDDEN') {
-			await api.joinRoom(roomId)
+			await matrix.joinRoom(roomId)
 			throw new Error('You are not allowed to read this room')
 		}
 		console.log(err)
@@ -57,15 +38,15 @@ export async function readTracks(roomId) {
  * @param {{url: string, title: string, description?: string}} track
  */
 export async function createTrack(roomId, track) {
+	if (!roomId) throw new Error('Missing roomId to create track')
 	const event = {
 		room_id: roomId,
 		event_type: EVENT_TYPE_TRACK,
 		content: JSON.stringify(track),
 	}
 	try {
-		console.log('sending track event', event)
-		const res = await api.sendEvent(event)
-		console.log(res)
+		console.log('↑ 1 track to matrix', event)
+		await matrix.sendEvent(event)
 	} catch (err) {
 		console.log(err)
 	}
@@ -98,3 +79,23 @@ function serializeMatrixTrack(matrixEvent) {
  * @property {string} content.title
  * @property {string} [content.description]
  */
+
+
+// Mock local storage required in @sctlib/mwc
+if (!globalThis.localStorage) {
+	// @ts-ignore
+	globalThis.localStorage = {
+		getItem(key) {
+			return this.storage[key]
+		},
+		setItem(key, val) {
+			this.storage = {...this.storage, [key]: val}
+		},
+		removeItem(key) {
+			let storage = {...this.storage}
+			delete storage[key]
+			this.storage = storage
+		},
+		storage: {},
+	}
+}
