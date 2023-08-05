@@ -19,9 +19,15 @@ function component({roomId, roomAlias}) {
 	}
 
 	return html`<host>
-		<button onclick=${join}>Join room</button>
-		<button onclick=${read}>Load room tracks</button>
-		<hr />
+    <h3>Matrix controls</h3>
+    <menu>
+      <button onclick=${join}>Join room</button>
+      <button onclick=${read}>Preview room tracks</button>
+    </menu>
+		<ul>
+			${tracks.map((track) => html`<li>${track.title}</li>`)}
+		</ul>
+		<h3>Create track</h3>
 		<form onsubmit=${create}>
 			<label for="url">URL</label>
 			<input name="url" type="url" required id="url" value="https://www.youtube.com/watch?v=v6B9kXp7fVc" /><br />
@@ -31,11 +37,6 @@ function component({roomId, roomAlias}) {
 			<textarea name="description" id="description"></textarea><br />
 			<button type="submit" name="submit" id="submit" role="primary">Add track to matrix</button>
 		</form>
-		<hr />
-		<matrix-room profile-id=${roomAlias}></matrix-room>
-		<ul>
-			${tracks.map((track) => html`<li>${track.title}</li>`)}
-		</ul>
 	</host>`
 }
 

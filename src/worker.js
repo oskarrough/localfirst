@@ -8,15 +8,13 @@ const ROOM_ID = '!aGwogbKehPpaWCGFIf:matrix.org'
 onmessage = async function (event) {
 	console.log('main thread says:', event.data)
 	if (event.data === 'sync') sync()
+	if (event.data === 'dump') dump()
 }
 
 async function sync() {
-	postMessage('syncing...')
-
 	const t0 = performance.now()
 	const db = await getDb()
-
-	let remotes = [
+	const remotes = [
 		new R4Remote(db),
 		new MatrixRemote(db, {roomId: ROOM_ID})
 	]
@@ -26,6 +24,9 @@ async function sync() {
 	await db.exec('commit')
 
 	postMessage(`sync done in ${secondsSince(t0)}s`)
-	
-	// await remotes[0].push()
+}
+
+async function dump() {
+  await (await getDb()).exec('delete from channels; delete from tracks;')
+  postMessage('dumped all channels and tracks')
 }
