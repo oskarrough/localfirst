@@ -1,6 +1,6 @@
 import {c, html, usePromise, useRef, useEffect} from 'atomico'
 import {DataTable} from 'simple-datatables'
-import {getDb} from '../local.js'
+import {getDb} from '../local-db.js'
 import humanizedDate from '../utils/humanized-date.js'
 
 // Note, we use execA to get an array of columns, not objects.
@@ -45,9 +45,8 @@ function createTable(tableElement, rows) {
 				select: 6,
 				type: 'date',
 				format: 'ISO_8601',
-				// render: (data) => humanizedDate(data),
+				render: (data) => humanizedDate(data),
 				cellClass: 'date',
-				sort: 'desc',
 			},
 		],
 	})

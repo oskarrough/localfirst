@@ -23,6 +23,8 @@ export default function humanizedDate(timestamp) {
 	if (isNaN(timestamp)) {
 		timestamp = new Date(timestamp).getTime()
 	}
+	
+	if (!timestamp) return '?'
 
 	const nowMs = Date.now()
 	const diffMs = nowMs - timestamp

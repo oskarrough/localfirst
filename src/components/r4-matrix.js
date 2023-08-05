@@ -20,8 +20,8 @@ function component({roomId, roomAlias}) {
 	}
 
 	return html`<host>
-		<button onclick=${join}>join room</button>
-		<button onclick=${read}>load tracks</button>
+		<button onclick=${join}>Join room</button>
+		<button onclick=${read}>Load room tracks</button>
 		<hr />
 		<form onsubmit=${create}>
 			<label for="url">URL</label>
@@ -31,7 +31,7 @@ function component({roomId, roomAlias}) {
 			<label for="description">Description</label>
 			<textarea name="description" id="description"></textarea><br />
 			<button type="submit" name="submit" id="submit" role="primary">
-				Add track
+				Add track to matrix
 			</button>
 		</form>
 		<hr />

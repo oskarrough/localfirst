@@ -1,5 +1,5 @@
 import { c, html, usePromise } from 'atomico'
-import { getDb } from '../local.js'
+import { getDb } from '../local-db.js'
 
 // Increments the visit count by one.
 export async function recordVisit() {

@@ -1,9 +1,22 @@
-// Init the local-first sqlite database and remote sync
-import './spawn-worker.js'
+import Worker from './worker.js?worker'
+import { recordVisit } from './components/visit-counter.js'
+import './ui.js'
+
+export const worker = new Worker()
+
+worker.onmessage = function (event) {
+	console.log('worker says:', event.data, event)
+	if (event.data.includes('sync done')) {
+		worker.postMessage('thanks worker! @todo update ui')
+	}
+}
+worker.onerror = function (event) {
+	console.log('error', event)
+}
+
+// Initiate sync
+worker.postMessage('sync')
 
 // Increment the visit counter by 1
-import { recordVisit } from './components/visit-counter.js'
 recordVisit()
 
-// And finally register the custom elements
-import './ui.js'
