@@ -17,7 +17,7 @@ async function sync() {
 	const db = await getDb()
 
 	let remotes = [
-		// new R4Remote(db),
+		new R4Remote(db),
 		new MatrixRemote(db, {roomId: ROOM_ID})
 	]
 

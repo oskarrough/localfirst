@@ -1,5 +1,5 @@
 import {c, html, useState} from 'atomico'
-import {createTrack, readTracks} from '../r4-matrix-sdk.js'
+import {createTrack, readTracks} from '../utils/r4-matrix-sdk.js'
 import matrix from '@sctlib/mwc/api'
 
 function component({roomId, roomAlias}) {

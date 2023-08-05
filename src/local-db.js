@@ -24,13 +24,13 @@ export async function getDb() {
 	return dbPromise
 }
 
-/** Upserts a list of channels to the local database
+/** Upserts a list of (valid) channels to the local database
  * @param {Array<Channel>} data
  */
 export async function insertChannels(data) {
 	const db = await getDb()
 	const valid = data.filter((t) => ChannelSchema.safeParse(t).success)
-	console.log(` ↓ ${valid.length} channels`, valid)
+	console.log(` ↓ ${valid.length} channels`)
 	const promises = valid.map((c) =>
 		db.exec(
 			`
@@ -47,13 +47,13 @@ export async function insertChannels(data) {
 	await Promise.all(promises)
 }
 
-/** Upserts a list of tracks into the local database
+/** Upserts a list of (valid) tracks into the local database
  * @param {Array<Track>} tracks
  */
 export async function insertTracks(tracks) {
 	const db = await getDb()
 	const valid = tracks.filter((t) => TrackSchema.safeParse(t).success)
-	console.log(` ↓ ${valid.length} tracks from ${tracks[0].slug}`, valid)
+	console.log(` ↓ ${valid.length} tracks from ${tracks[0].slug}`)
 	try {
 		const promises = valid.map((x) =>
 			db.exec(
@@ -75,3 +75,5 @@ export async function insertTracks(tracks) {
 		console.log(err)
 	}
 }
+
+function insertTrack(track) {}

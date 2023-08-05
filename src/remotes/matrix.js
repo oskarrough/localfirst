@@ -1,5 +1,5 @@
 import Remote from './remote.js'
-import {createTrack, readTracks} from '../r4-matrix-sdk.js'
+import {createTrack, readTracks} from '../utils/r4-matrix-sdk.js'
 
 // new MatrixRemote(db, {roomId: '123'})
 export default class MatrixRemote extends Remote {
