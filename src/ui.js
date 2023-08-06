@@ -9,13 +9,11 @@ import './components/r4-tracks.js'
 import './components/r4-matrix.js'
 import './components/local-settings.js'
 
-import {worker2} from './main.js'
-// export const worker2 = new MagicWorker('worker2.js')
+import {worker} from './spawn-workers.js'
 
 async function what() {
   // console.log(`testworker2 ${await testWorker.counter}`)
-  console.log('worker2!!', (await worker2.query('select name from employees limit 1')))
-  window.oskar = worker2
+  console.log('worker!!', (await worker.query('select name from employees limit 1')))
 }
 
 setTimeout(what, 1000)
@@ -23,14 +21,14 @@ setTimeout(what, 1000)
 async function toggleRemote(name, disable = false) {
   console.log('toggling', name, disable)
   try {
-    await worker2.exec(`update settings set provider_${name} = ? where id = 1`)
+    await worker.exec(`update settings set provider_${name} = ? where id = 1`)
   } catch (err) {
     console.log(err)
   }
 }
 
 async function getSettings() {
-  return (await worker2.query('select * from settings where id = 1'))[0]
+  return (await worker.query('select * from settings where id = 1'))[0]
 }
 
 function LocalFirst() {
@@ -46,7 +44,7 @@ function LocalFirst() {
 
     const sql = 'UPDATE settings SET provider_matrix = ?, provider_r4 = ? WHERE id = ?'
     const bindValues = [matrix, r4, 1] // 1 and 0 are the new values, and 42 is the user_id
-    await worker2.exec(sql, { bind: bindValues })
+    await worker.exec(sql, { bind: bindValues })
 
     // toggleRemote('r4', r4)
     // toggleRemote('matrix', r4)

@@ -17,8 +17,11 @@ export default class R4Remote extends Remote {
 	async pullTracks() {
 		const db = this.db
 
+    console.error('@todo db is undefined here after switching workers')
+
 		/** @type {Array<import('../types.js').Channel>} */
-		const channels = await db.execO('select * from channels')
+		const channels = await db.selectObjects('select * from channels')
+    console.log(channels)
 
 		await db.exec('begin transaction')
 		await Promise.all(
