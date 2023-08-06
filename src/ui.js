@@ -1,16 +1,96 @@
-import {c, html} from 'atomico'
+import {c, html, usePromise} from 'atomico'
 
+import '@sctlib/mwc/raw'
+import api from '@sctlib/mwc/api'
+
+import './components/async-button.js'
 import './components/r4-channels.js'
 import './components/r4-tracks.js'
 import './components/r4-matrix.js'
 import './components/local-settings.js'
 
+import {worker2} from './main.js'
+// export const worker2 = new MagicWorker('worker2.js')
+
+async function what() {
+  // console.log(`testworker2 ${await testWorker.counter}`)
+  console.log('worker2!!', (await worker2.query('select name from employees limit 1')))
+  window.oskar = worker2
+}
+
+setTimeout(what, 1000)
+
+async function toggleRemote(name, disable = false) {
+  console.log('toggling', name, disable)
+  try {
+    await worker2.exec(`update settings set provider_${name} = ? where id = 1`)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+async function getSettings() {
+  return (await worker2.query('select * from settings where id = 1'))[0]
+}
+
 function LocalFirst() {
+  const promise = usePromise(getSettings)
+
+	const setRemotes = async (event) => {
+		event.preventDefault()
+    const fd = new FormData(event.currentTarget)
+    const matrix = fd.get('matrix') ? 1 : 0
+    const r4 = fd.get('r4') ? 1 : 0
+    console.log('setRemotes', {matrix, r4})
+    console.log(await getSettings())
+
+    const sql = 'UPDATE settings SET provider_matrix = ?, provider_r4 = ? WHERE id = ?'
+    const bindValues = [matrix, r4, 1] // 1 and 0 are the new values, and 42 is the user_id
+    await worker2.exec(sql, { bind: bindValues })
+
+    // toggleRemote('r4', r4)
+    // toggleRemote('matrix', r4)
+    console.log(await getSettings())
+  }
+
+	const onlogin = async (event) => {
+		// event.preventDefault()
+		console.log('onlogin', event.detail)
+		// const res =  await api.login({user_id: '@donle:matrix.org', password: ".k'2t/uS-4yy"})
+		// console.log('second try', res)
+	}
+
+	if (promise.pending) return html`<host><p>Loading...</p></host>`
+	if (!promise.fulfilled) return html`<host>error: ${promise.result.message}</host>`
+
+  const settings = promise.result
+
 	return html`<host>
 		<p>Hello local first. <visit-counter></visit-counter></p>
-		
+
+    <p>Remotes</h2>
+    <form onchange=${setRemotes}>
+      <label><input checked=${settings.provider_matrix} type="checkbox" name="matrix" /> Matrix room</label>
+      <label><input checked=${settings.provider_r4} type="checkbox" name="r4" /> Radio4000 beta</label>
+     </form>
+
+		<h3>Matrix authentication</h3>
+		<matrix-auth show-guest="true" show-user="true">
+			<div slot="logged-in">You're logged in a registered matrix user.</div>
+			<div slot="logged-out"><strong>Not logged in a matrix user</strong> (non guest)</div> </matrix-auth
+		>
+		<matrix-auth>
+			<div slot="logged-in">
+				<matrix-logout />
+			</div>
+			<div slot="logged-out">
+		    <matrix-login onuser=${onlogin}></matrix-login>
+			</div>
+		</matrix-auth>
+		<hr />
+
 		<local-settings></local-settings>
-		
+
 		<r4-matrix room-id="!aGwogbKehPpaWCGFIf:matrix.org" room-alias="#r4radiotest123:matrix.org"></r4-matrix>
 
 		<h2>Local Channels</h2>
@@ -22,3 +102,4 @@ function LocalFirst() {
 }
 
 customElements.define('local-first', c(LocalFirst))
+
