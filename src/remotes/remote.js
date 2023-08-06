@@ -1,5 +1,5 @@
 import {DB} from '@vlcn.io/crsqlite-wasm'
-import {insertChannels, insertTracks} from '../local-db.js'
+import {insertChannels, insertTracks} from '../mutations.js'
 
 /**
  * Extend this class to create a new remote.
