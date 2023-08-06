@@ -1,23 +1,16 @@
 import {c, html} from 'atomico'
-import {worker} from './main.js'
 
 import './components/r4-channels.js'
 import './components/r4-tracks.js'
 import './components/r4-matrix.js'
+import './components/local-settings.js'
 
 function LocalFirst() {
-	const sync = () => worker.postMessage('sync')
-	const dump = () => worker.postMessage('dump')
-
 	return html`<host>
 		<p>Hello local first. <visit-counter></visit-counter></p>
 		
-    <h3>Local database controls</h3>
-		<menu>
-      <button onclick=${sync}>Sync</button>
-      <button onclick=${dump}>Dump</button>
-    </menu>
-
+		<local-settings></local-settings>
+		
 		<r4-matrix room-id="!aGwogbKehPpaWCGFIf:matrix.org" room-alias="#r4radiotest123:matrix.org"></r4-matrix>
 
 		<h2>Local Channels</h2>

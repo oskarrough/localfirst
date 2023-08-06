@@ -44,12 +44,8 @@ export async function createTrack(roomId, track) {
 		event_type: EVENT_TYPE_TRACK,
 		content: JSON.stringify(track),
 	}
-	try {
-		console.log('↑ 1 track to matrix', event)
-		await matrix.sendEvent(event)
-	} catch (err) {
-		console.log(err)
-	}
+	console.log('↑ 1 track to matrix', event)
+	return matrix.sendEvent(event)
 }
 
 /**
@@ -79,7 +75,6 @@ function serializeMatrixTrack(matrixEvent) {
  * @property {string} content.title
  * @property {string} [content.description]
  */
-
 
 // Mock local storage required in @sctlib/mwc
 if (!globalThis.localStorage) {

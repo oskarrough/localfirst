@@ -30,3 +30,11 @@ async function dump() {
   await (await getDb()).exec('delete from channels; delete from tracks;')
   postMessage('dumped all channels and tracks')
 }
+
+
+/*
+console.log('42')
+const db = await getDb()
+const mr = new MatrixRemote(db, {roomId: ROOM_ID})
+mr.push()
+*/

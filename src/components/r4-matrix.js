@@ -4,8 +4,14 @@ import matrix from '@sctlib/mwc/api'
 
 function component({roomId, roomAlias}) {
 	const [tracks, setTracks] = useState([])
+	const [needsConsent, setNeedsConsent] = useState(false)
 
-	const join = () => matrix.joinRoom(roomId)
+	const join = async () => {
+		const res = await matrix.joinRoom(roomId)
+		if (res.errcode === 'M_CONSENT_NOT_GIVEN') {
+			setNeedsConsent(res.error)
+		}
+	}
 	const read = () => readTracks(roomId).then(setTracks) //.then(insertTracks(tracks))
 	const create = (event) => {
 		event.preventDefault()
@@ -19,11 +25,12 @@ function component({roomId, roomAlias}) {
 	}
 
 	return html`<host>
-    <h3>Matrix controls</h3>
-    <menu>
-      <button onclick=${join}>Join room</button>
-      <button onclick=${read}>Preview room tracks</button>
-    </menu>
+		<h3>Matrix controls</h3>
+		<menu>
+			<button onclick=${join}>Join room</button>
+			<button onclick=${read}>Preview room tracks</button>
+		</menu>
+		${needsConsent && html`<p>${needsConsent}</p>`}
 		<ul>
 			${tracks.map((track) => html`<li>${track.title}</li>`)}
 		</ul>

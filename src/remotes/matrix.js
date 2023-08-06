@@ -15,8 +15,9 @@ export default class MatrixRemote extends Remote {
 			slug: roomId,
 			url: 'https://www.youtube.com/watch?v=9bZkp7q19f0',
 			title: 'hey',
-			description: ''
+			description: '',
 		}
-		await createTrack(roomId, track)
+		const res = await createTrack(roomId, track)
+		console.log('here', res)
 	}
 }
