@@ -20,7 +20,7 @@ export default class R4Remote extends Remote {
 		/** @type {Array<import('../types.js').Channel>} */
 		const channels = await db.execO('select * from channels')
 
-		// await db.exec('begin transaction')
+		await db.exec('begin transaction')
 		await Promise.all(
 			channels.map(async ({slug}) => {
 				const {data, error} = await sdk.channels.readChannelTracks(slug)
@@ -29,6 +29,6 @@ export default class R4Remote extends Remote {
 				return this.insertTracks(tracks)			
 			})
 		)
-		// await db.exec('commit')
+		await db.exec('commit')
 	}
 }

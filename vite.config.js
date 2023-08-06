@@ -1,9 +1,10 @@
 import atomico from '@atomico/vite'
-import {comlink} from 'vite-plugin-comlink'
 
 /** @type {import('vite').UserConfig} */
 export default {
-	plugins: [comlink(), atomico()],
+	plugins: [
+    atomico()
+  ],
 	appType: 'mpa',
 	server: {
 		headers: {
@@ -19,7 +20,6 @@ export default {
 		target: 'esnext',
 	},
 	worker: {
-		plugins: [comlink()],
 		format: 'es',
 		rollupOptions: {
 			output: {

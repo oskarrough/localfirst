@@ -27,8 +27,7 @@
   "devDependencies": {
     "@atomico/vite": "^2.11.0",
     "eslint": "^8.46.0",
-    "vite": "^4.4.8",
-    "vite-plugin-comlink": "^3.0.5"
+    "vite": "^4.4.8"
   },
   "prettier": {
     "bracketSpacing": false,

@@ -1,33 +1,13 @@
-import Worker from './worker.js?worker'
-import Worker2 from './worker2.js?worker'
-import { recordVisit } from './components/visit-counter.js'
+import * as Comlink from 'comlink'
+import {recordVisit} from './components/visit-counter.js'
 import './ui.js'
 
-// Set up first worker.
-export const worker = new Worker()
-worker.onmessage = function (event) {
-	console.log('worker says:', event.data)
-	if (event.data.includes('sync done')) {
-		worker.postMessage('thanks worker! @todo update ui')
-	}
+export default function MagicWorker(file) {
+  return Comlink.wrap(new Worker(new URL(file, import.meta.url), {type: 'module'}))
 }
-worker.onerror = function (event) {
-	console.log('error', event)
-}
-// worker.postMessage('hi worker!')
-// worker.postMessage('sync') // this initiates the sync
 
-// Setup second worker.
-export const worker2 = new Worker2()
-worker2.onmessage = function (event) {
-	console.log('worker2 says:', event.data)
-	// if (event.data.includes('sync done')) {
-	// 	worker.postMessage('thanks worker! @todo update ui')
-	// }
-}
-worker2.onerror = function (event) {
-	console.log('worker2 error', event)
-}
+export const worker = new MagicWorker('worker.js')
+// export const worker2 = new MagicWorker('worker2.js')
 
 // Increment the visit counter by 1
 recordVisit()

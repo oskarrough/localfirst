@@ -1,11 +1,11 @@
-import {c, html} from 'atomico'
+import {c, html, useState} from 'atomico'
 import {worker} from '../main.js'
 
-function sync() {
-	return worker.postMessage('sync')
+async function sync() {
+  await worker.sync()
 }
-function dump() {
-	return worker.postMessage('dump')
+async function dump() {
+  await worker.dump()
 }
 
 // https://web.dev/origin-private-file-system/#accessing-existing-files-and-folders
@@ -28,14 +28,34 @@ async function getDatabaseFile() {
 	}
 }
 
+function smartButton({label, labeling, action}) {
+  const [loading, setLoading] = useState(false)
+  const doAction = async () => {
+    setLoading(true)
+    await action()
+    setLoading(false)
+  }
+  return html`<host>
+    <button disabled=${loading} onclick=${doAction}>${!loading ? label : labeling}</button>
+    </host>`
+}
+smartButton.props = {
+  label: String,
+  labeling: String,
+  action: Function
+}
+customElements.define('smart-button', c(smartButton))
+
 function component() {
 	return html`<host>
 		<h3>Local settings</h3>
 		<menu>
-			<button onclick=${sync}>Sync</button>
-			<button onclick=${dump}>Dump</button>
-			<button onclick=${getDatabaseFile}>Download db</button>
+			<smart-button action=${sync} label="Sync" labeling="Syncing" />
+			<smart-button action=${dump} label="Dump" labeling="Dumping" />
+			<button onclick=${getDatabaseFile}>Download sqlite db</button>
+      <a href="/">Reload</a>
 		</menu></host>`
 }
 
 customElements.define('local-settings', c(component))
+
