@@ -17,10 +17,13 @@ export default class R4Remote extends Remote {
 	async pullTracks() {
 		const db = this.db
 
-		/** @type {Array<import('../types.js').Channel>} */
-		const channels = await db.execO('select * from channels')
+    console.error('@todo db is undefined here after switching workers')
 
-		// await db.exec('begin transaction')
+		/** @type {Array<import('../types.js').Channel>} */
+		const channels = await db.selectObjects('select * from channels')
+    console.log(channels)
+
+		await db.exec('begin transaction')
 		await Promise.all(
 			channels.map(async ({slug}) => {
 				const {data, error} = await sdk.channels.readChannelTracks(slug)
@@ -29,6 +32,6 @@ export default class R4Remote extends Remote {
 				return this.insertTracks(tracks)			
 			})
 		)
-		// await db.exec('commit')
+		await db.exec('commit')
 	}
 }

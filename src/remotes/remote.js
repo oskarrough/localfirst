@@ -1,5 +1,5 @@
-import {DB} from '@vlcn.io/crsqlite-wasm'
-import {insertChannels, insertTracks} from '../local-db.js'
+// import {DB} from '@vlcn.io/crsqlite-wasm'
+import {insertChannels, insertTracks} from '../mutations.js'
 
 /**
  * Extend this class to create a new remote.
@@ -12,11 +12,12 @@ import {insertChannels, insertTracks} from '../local-db.js'
  */
 export default class Remote {
 	/**
-	 * @param {DB} db
+	 * @param {object} db
 	 * @param {object} [props]
 	 */
 	constructor(db, props) {
 		// Use these three to insert data into the local db.
+    console.log(db)
 		this.db = db
 		this.props = props
 		this.insertChannels = insertChannels
