@@ -22,32 +22,33 @@ function component() {
 customElements.define('r4-local-tracks', c(component))
 
 function createTable(tableElement, rows) {
+	console.log(rows)
 	return new DataTable(tableElement, {
 		data: {
-			headings: ['Id', 'Channel', 'URL', 'Title', 'Description', 'Created', 'Updated'],
+			headings: ['Id', 'Channel slug', 'URL', '??', 'Title', 'Description', 'Created', 'Updated'],
 			data: rows,
 		},
 		perPageSelect: [10, 50, 100, 200, 500, 1000, 4000],
 		perPage: 10,
 		columns: [
-			{select: 0, hidden: true},
-			{select: 2, hidden: true},
-			{select: 4, hidden: true},
-			{
-				select: 5,
-				type: 'date',
-				format: 'ISO_8601',
-				sort: 'desc',
-				// render: (data) => humanizedDate(data),
-				cellClass: 'date',
-			},
-			{
-				select: 6,
-				type: 'date',
-				format: 'ISO_8601',
-				render: (data) => humanizedDate(data),
-				cellClass: 'date',
-			},
+			// {select: 0, hidden: false},
+			// {select: 1, hidden: false},
+			// {select: 2, hidden: false},
+			// {
+			// 	select: 7,
+			// 	type: 'date',
+			// 	format: 'ISO_8601',
+			// 	sort: 'desc',
+			// 	// render: (data) => humanizedDate(data),
+			// 	cellClass: 'date',
+			// },
+			// {
+			// 	select: 8,
+			// 	type: 'date',
+			// 	format: 'ISO_8601',
+			// 	render: (data) => humanizedDate(data),
+			// 	cellClass: 'date',
+			// },
 		],
 	})
 }

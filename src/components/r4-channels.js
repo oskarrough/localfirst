@@ -23,19 +23,18 @@ function component() {
 customElements.define('r4-local-channels', c(component))
 
 function createTable(tableElement, rows) {
+	console.log('create channel table', rows)
 	return new DataTable(tableElement, {
 		// perPageSelect: [10, 50, 100, 200, 500, 1000, 4000],
 		perPage: 5,
 		columns: [
-			{ select: 0, hidden: true },
+			{ select: 0, hidden: false },
+			{ select: 1 },
+			{ select: 2 },
+			{ select: 3, hidden: false }, // description
+			// { select: 4, hidden: true }, // updated_at
 			{
-				select: 1,
-				render(data) {
-					return `<a href="#">${data[0].data}</a>`
-				},
-			},
-			{
-				select: 3,
+				select: 5,
 				type: 'date',
 				// format: 'MMYYYY/DD/MM',
 				sort: 'desc',
@@ -44,7 +43,7 @@ function createTable(tableElement, rows) {
 			},
 		],
 		data: {
-			headings: ['Id', 'Name', 'Slug', 'Created'],
+			headings: ['Id', 'Name', 'Slug', 'Description', 'Updated', 'Created'],
 			data: rows,
 		},
 	})

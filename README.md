@@ -35,3 +35,10 @@ Other interesting projects using databases in browser
 - https://github.com/nalgeon/sqlime
 
 
+```mermaidjs
+worker
+website
+sqlite
+worker.sync()
+worker.dump()
+```

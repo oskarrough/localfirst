@@ -17,16 +17,22 @@ export default class Remote {
 	 */
 	constructor(db, props) {
 		// Use these three to insert data into the local db.
-    console.log(db)
+		console.log('constructed new remote', db)
 		this.db = db
 		this.props = props
 		this.insertChannels = insertChannels
 		this.insertTracks = insertTracks
 	}
-	
+
 	/** @returns {Promise<any>} */
 	pull() {
 		// all remotes must overwrite this method
 		return Promise.reject('pull() not implemented')
+	}
+
+	/** @returns {Promise<any>} */
+	push() {
+		// all remotes must overwrite this method
+		return Promise.reject('push() not implemented')
 	}
 }

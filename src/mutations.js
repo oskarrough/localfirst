@@ -1,8 +1,8 @@
 import {getDb} from './local-db.js'
-import {ChannelSchema, TrackSchema} from './types.js'
+import {ChannelSchema, TrackSchema} from './schemas.js'
 
-/** @typedef {import('./types.js').Channel} Channel */
-/** @typedef {import('./types.js').Track} Track */
+/** @typedef {import('./schemas.js').Channel} Channel */
+/** @typedef {import('./schemas.js').Track} Track */
 
 /** Upserts a list of (valid) channels to the local database
  * @param {Array<Channel>} data

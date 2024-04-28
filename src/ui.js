@@ -1,7 +1,7 @@
 import {c, html, usePromise} from 'atomico'
 
 import '@sctlib/mwc/raw'
-import api from '@sctlib/mwc/api'
+// import api from '@sctlib/mwc/api'
 
 import './components/async-button.js'
 import './components/r4-channels.js'
@@ -12,44 +12,41 @@ import './components/local-settings.js'
 import {worker} from './spawn-workers.js'
 
 async function what() {
-  // console.log(`testworker2 ${await testWorker.counter}`)
-  console.log('worker!!', (await worker.query('select name from employees limit 1')))
+	console.log('worker!!', await worker.query('select name from employees limit 1'))
 }
 
 setTimeout(what, 1000)
 
 async function toggleRemote(name, disable = false) {
-  console.log('toggling', name, disable)
-  try {
-    await worker.exec(`update settings set provider_${name} = ? where id = 1`)
-  } catch (err) {
-    console.log(err)
-  }
+	console.log('toggling', name, disable)
+	try {
+		await worker.exec(`update settings set provider_${name} = ? where id = 1`)
+	} catch (err) {
+		console.log(err)
+	}
 }
 
 async function getSettings() {
-  return (await worker.query('select * from settings where id = 1'))[0]
+	return (await worker.query('select * from settings where id = 1'))[0]
 }
 
 function LocalFirst() {
-  const promise = usePromise(getSettings)
+	const promise = usePromise(getSettings)
 
 	const setRemotes = async (event) => {
 		event.preventDefault()
-    const fd = new FormData(event.currentTarget)
-    const matrix = fd.get('matrix') ? 1 : 0
-    const r4 = fd.get('r4') ? 1 : 0
-    console.log('setRemotes', {matrix, r4})
-    console.log(await getSettings())
+		const fd = new FormData(event.currentTarget)
+		const matrix = fd.get('matrix') ? 1 : 0
+		const r4 = fd.get('r4') ? 1 : 0
 
-    const sql = 'UPDATE settings SET provider_matrix = ?, provider_r4 = ? WHERE id = ?'
-    const bindValues = [matrix, r4, 1] // 1 and 0 are the new values, and 42 is the user_id
-    await worker.exec(sql, { bind: bindValues })
+		const sql = 'UPDATE settings SET provider_matrix = ?, provider_r4 = ? WHERE id = ?'
+		const bindValues = [matrix, r4, 1] // 1 and 0 are the new values, and 42 is the user_id
+		await worker.exec(sql, {bind: bindValues})
 
-    // toggleRemote('r4', r4)
-    // toggleRemote('matrix', r4)
-    console.log(await getSettings())
-  }
+		// toggleRemote('r4', r4)
+		// toggleRemote('matrix', r4)
+		console.log('setRemotes', await getSettings())
+	}
 
 	const onlogin = async (event) => {
 		// event.preventDefault()
@@ -61,35 +58,52 @@ function LocalFirst() {
 	if (promise.pending) return html`<host><p>Loading...</p></host>`
 	if (!promise.fulfilled) return html`<host>error: ${promise.result.message}</host>`
 
-  const settings = promise.result
+	const settings = promise.result
 
 	return html`<host>
-		<p>Hello local first. <visit-counter></visit-counter></p>
+		<p>Hello. <visit-counter></visit-counter></p>
+		<h2>Local-First</h2>
+		<p>
+			This is an experiment in local-first software. When you visit this for the first time, a fresh SQLite database is
+			created in your browser.
+		</p>
+		<hr />
+		<h2>Remotes</h2>
+		<p>
+			The system has the concept of a <em>remote</em>. Remotes are external services that define pull+push methods that
+			serialize to the Radio4000 schema. Currently two remotes are supported: Radio4000 and Matrix.
+		</p>
+		<form onchange=${setRemotes}>
+			<fieldset>
+				<legend>Enabled remotes</legend>
+				<label><input checked=${settings.provider_matrix} type="checkbox" name="matrix" /> Matrix room</label>
+				<label><input checked=${settings.provider_r4} type="checkbox" name="r4" /> Radio4000</label>
+			</fieldset>
+		</form>
 
-    <p>Remotes</h2>
-    <form onchange=${setRemotes}>
-      <label><input checked=${settings.provider_matrix} type="checkbox" name="matrix" /> Matrix room</label>
-      <label><input checked=${settings.provider_r4} type="checkbox" name="r4" /> Radio4000 beta</label>
-     </form>
+		<h2>Local database</h2>
+		<p>Sync your local database with the remote services.</p>
+		<local-settings></local-settings>
+
+		<hr />
 
 		<h3>Matrix authentication</h3>
 		<matrix-auth show-guest="true" show-user="true">
 			<div slot="logged-in">You're logged in a registered matrix user.</div>
-			<div slot="logged-out"><strong>Not logged in a matrix user</strong> (non guest)</div> </matrix-auth
-		>
+			<div slot="logged-out"><strong>Not logged in a matrix user</strong> (non guest)</div>
+		</matrix-auth>
 		<matrix-auth>
 			<div slot="logged-in">
 				<matrix-logout />
 			</div>
 			<div slot="logged-out">
-		    <matrix-login onuser=${onlogin}></matrix-login>
+				<matrix-login onuser=${onlogin}></matrix-login>
 			</div>
 		</matrix-auth>
-		<hr />
-
-		<local-settings></local-settings>
 
 		<r4-matrix room-id="!aGwogbKehPpaWCGFIf:matrix.org" room-alias="#r4radiotest123:matrix.org"></r4-matrix>
+
+		<hr />
 
 		<h2>Local Channels</h2>
 		<r4-local-channels></r4-local-channels>
@@ -100,4 +114,3 @@ function LocalFirst() {
 }
 
 customElements.define('local-first', c(LocalFirst))
-

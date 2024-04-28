@@ -1,11 +1,11 @@
 import {c, html} from 'atomico'
 import {worker} from '../spawn-workers.js'
 
-async function sync() {
-  await worker.sync()
+async function pull() {
+	await worker.pull()
 }
 async function dump() {
-  await worker.dump()
+	await worker.dump()
 }
 
 // https://web.dev/origin-private-file-system/#accessing-existing-files-and-folders
@@ -15,7 +15,7 @@ async function getDatabaseFile() {
 		// Name has to match the one in worker2.js
 		const fileHandle = await opfsRoot.getFileHandle('mydb.sqlite3')
 		const fileData = await fileHandle.getFile()
-		const handle = await showSaveFilePicker({
+		const handle = await window.showSaveFilePicker({
 			suggestedName: fileData.name,
 		})
 		const writable = await handle.createWritable()
@@ -30,14 +30,14 @@ async function getDatabaseFile() {
 
 function component() {
 	return html`<host>
-		<h3>Local settings</h3>
 		<menu>
-			<async-button action=${sync} label="Sync" labeling="Syncing" />
-			<async-button action=${dump} label="Dump" labeling="Dumping" />
-			<button onclick=${getDatabaseFile}>Download sqlite db</button>
-      <a href="/">Reload</a>
-		</menu></host>`
+			<async-button action=${pull} label="Pull" labeling="Pull" />
+			<button disabled title="@todo">Push</button>
+			<async-button action=${dump} label="Dump local db" labeling="Dumping" />
+			<button onclick=${getDatabaseFile}>Download local db</button>
+			<button onclick=${() => window.location = '/'}>Reload page</button>
+		</menu></host
+	>`
 }
 
 customElements.define('local-settings', c(component))
-

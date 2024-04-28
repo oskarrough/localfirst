@@ -3,7 +3,7 @@
 		"checkJs": true,
 		"strict": false,
 		"module": "es2022",
-		"moduleResolution": "nodenext",
+		"moduleResolution": "bundler",
 		"target": "es2022"
 	}
 }
