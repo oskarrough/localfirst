@@ -8,11 +8,13 @@ export default {
 	appType: 'mpa',
 	server: {
 		headers: {
+			// Needed for @sqlite.org/sqlite-wasm dependency.
 			'Cross-Origin-Opener-Policy': 'same-origin',
 			'Cross-Origin-Embedder-Policy': 'require-corp',
 		},
 	},
 	optimizeDeps: {
+		// Needed for @sqlite.org/sqlite-wasm dependency.
 		exclude: ['@sqlite.org/sqlite-wasm'],
 	},
 

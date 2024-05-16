@@ -1,8 +1,10 @@
 import {getDb} from './local-db.js'
-import {ChannelSchema, TrackSchema} from './types.js'
+import {ChannelSchema, TrackSchema} from './schemas.js'
 
-/** @typedef {import('./types.js').Channel} Channel */
-/** @typedef {import('./types.js').Track} Track */
+/** The idea with this file is to have a method for every mutation we need on the local database. */
+
+/** @typedef {import('./schemas.js').Channel} Channel */
+/** @typedef {import('./schemas.js').Track} Track */
 
 /** Upserts a list of (valid) channels to the local database
  * @param {Array<Channel>} data
@@ -14,8 +16,8 @@ export async function insertChannels(data) {
 	const promises = valid.map((c) =>
 		db.exec(
 			`
-    insert into channels 
-    (id, name, slug, created_at) 
+    insert into channels
+    (id, name, slug, created_at)
     values (?, ?, ?, ?)
     on conflict(id) do update set
     name = excluded.name,
@@ -38,8 +40,8 @@ export async function insertTracks(tracks) {
 		const promises = valid.map((x) =>
 			db.exec(
 				`
-    insert into tracks 
-    (id, slug, url, title, description, created_at, updated_at) 
+    insert into tracks
+    (id, slug, url, title, description, created_at, updated_at)
     values (?, ?, ?, ?, ?, ?, ?)
     on conflict(id) do update set
     url = excluded.url,

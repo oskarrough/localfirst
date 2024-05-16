@@ -12,16 +12,23 @@ function component({roomId, roomAlias}) {
 			setNeedsConsent(res.error)
 		}
 	}
+
 	const read = () => readTracks(roomId).then(setTracks) //.then(insertTracks(tracks))
-	const create = (event) => {
+
+	const create = async (event) => {
 		event.preventDefault()
 		const fd = new FormData(event.target)
-		createTrack(roomId, {
-			slug: roomId,
-			url: fd.get('url'),
-			title: fd.get('title'),
-			description: fd.get('description'),
-		})
+		try {
+			const res = await createTrack(roomId, {
+				slug: roomId,
+				url: fd.get('url'),
+				title: fd.get('title'),
+				description: fd.get('description'),
+			})
+			if (res.error) throw res
+		} catch (err) {
+			console.log(err)
+		}
 	}
 
 	return html`<host>
@@ -34,14 +41,12 @@ function component({roomId, roomAlias}) {
 		<ul>
 			${tracks.map((track) => html`<li>${track.title}</li>`)}
 		</ul>
-		<h3>Create track</h3>
+		<h3>Create track on Matrix</h3>
 		<form onsubmit=${create}>
 			<label for="url">URL</label>
 			<input name="url" type="url" required id="url" value="https://www.youtube.com/watch?v=v6B9kXp7fVc" /><br />
 			<label for="title">Title</label>
 			<input name="title" type="text" required id="title" value=${`Test track ${new Date().getTime()}`} /><br />
-			<label for="description">Description</label>
-			<textarea name="description" id="description"></textarea><br />
 			<button type="submit" name="submit" id="submit" role="primary">Add track to matrix</button>
 		</form>
 	</host>`

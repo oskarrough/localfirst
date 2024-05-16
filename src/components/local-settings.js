@@ -1,11 +1,12 @@
 import {c, html} from 'atomico'
 import {worker} from '../spawn-workers.js'
 
-async function sync() {
-  await worker.sync()
+async function pull() {
+	await worker.pull()
 }
-async function dump() {
-  await worker.dump()
+
+async function deleteAll() {
+	await worker.deleteAll()
 }
 
 // https://web.dev/origin-private-file-system/#accessing-existing-files-and-folders
@@ -32,12 +33,12 @@ function component() {
 	return html`<host>
 		<h3>Local settings</h3>
 		<menu>
-			<async-button action=${sync} label="Sync" labeling="Syncing" />
-			<async-button action=${dump} label="Dump" labeling="Dumping" />
+			<async-button action=${pull} label="Pull from remotes" labeling="Pulling" />
+			<async-button action=${deleteAll} label="Delete local data" labeling="Deleting" />
 			<button onclick=${getDatabaseFile}>Download sqlite db</button>
-      <a href="/">Reload</a>
-		</menu></host>`
+			<a href="/">Reload page</a>
+		</menu>
+	</host>`
 }
 
 customElements.define('local-settings', c(component))
-

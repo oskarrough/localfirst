@@ -1,6 +1,6 @@
 import sqliteWasm from '@vlcn.io/crsqlite-wasm'
 import wasmUrl from '@vlcn.io/crsqlite-wasm/crsqlite.wasm?url'
-import {schema} from './types.js'
+import {schema} from './schemas.js'
 
 // Singleton promise.
 const dbPromise = (async () => {

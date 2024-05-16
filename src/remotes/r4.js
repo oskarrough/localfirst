@@ -9,6 +9,7 @@ export default class R4Remote extends Remote {
 	}
 
 	async pullChannels() {
+		console.log('pulling all channels')
 		const {data, error} = await sdk.channels.readChannels()
 		if (error && !data?.length) return
 		return this.insertChannels(data)
@@ -17,19 +18,20 @@ export default class R4Remote extends Remote {
 	async pullTracks() {
 		const db = this.db
 
-    console.error('@todo db is undefined here after switching workers')
+		if (!db) throw new Error('@todo db is undefined here after switching workers')
 
-		/** @type {Array<import('../types.js').Channel>} */
+		/** @type {Array<import('../schemas.js').Channel>} */
 		const channels = await db.selectObjects('select * from channels')
-    console.log(channels)
+    console.log('local channels', channels)
 
 		await db.exec('begin transaction')
 		await Promise.all(
 			channels.map(async ({slug}) => {
 				const {data, error} = await sdk.channels.readChannelTracks(slug)
+				console.log(`tracks from channel@${slug}`, data, error)
 				if (error || !data?.length) return
 				const tracks = data?.map((t) => ({...t, slug}))
-				return this.insertTracks(tracks)			
+				return this.insertTracks(tracks)
 			})
 		)
 		await db.exec('commit')

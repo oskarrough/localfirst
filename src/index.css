@@ -19,3 +19,7 @@ td.date {
 	min-width: 6rem;
 	text-align: right;
 }
+
+menu {
+	padding: 0;
+}

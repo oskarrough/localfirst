@@ -6,13 +6,13 @@ export function MagicWorker(file) {
 }
 
 // export var worker = new MagicWorker('worker.js')
-export var worker = new MagicWorker('worker2.js')
+export var worker = MagicWorker('worker.js')
 // export const testWorker = new MagicWorker('worker-test.js')
 
-// async function what() {
-//   console.log(`testworker ${await testWorker.counter}`)
-//   console.log('worker2', (await worker2.query('select name from employees limit 1')))
-// }
+async function what() {
+  // console.log(`testworker ${await testWorker.counter}`)
+  console.log('worker what', (await worker.query('select name from employees limit 1')))
+}
 
-// what()
-
+console.log('DEBUG TIP: Access the worker on window.localfirstworker')
+window.localfirstworker = worker
