@@ -21,6 +21,10 @@ function component() {
 
 customElements.define('r4-local-tracks', c(component))
 
+/**
+ * @param {HTMLTableElement} tableElement
+ * @param {import('../schemas.js').Track[]} rows
+ */
 function createTable(tableElement, rows) {
 	return new DataTable(tableElement, {
 		data: {

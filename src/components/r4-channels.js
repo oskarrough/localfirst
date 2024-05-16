@@ -22,6 +22,10 @@ function component() {
 
 customElements.define('r4-local-channels', c(component))
 
+/**
+ * @param {HTMLTableElement} tableElement
+ * @param {import('../schemas.js').Channel[]} rows
+ */
 function createTable(tableElement, rows) {
 	return new DataTable(tableElement, {
 		// perPageSelect: [10, 50, 100, 200, 500, 1000, 4000],
