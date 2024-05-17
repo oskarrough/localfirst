@@ -42,7 +42,7 @@ export async function createTrack(roomId, track) {
 	const event = {
 		room_id: roomId,
 		event_type: EVENT_TYPE_TRACK,
-		content: JSON.stringify(track),
+		content: track
 	}
 	console.log('↑ 1 track to matrix', event)
 	return matrix.sendEvent(event)
