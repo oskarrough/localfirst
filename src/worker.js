@@ -10,6 +10,8 @@ const DATABASE_FILENAME = '/mydb.sqlite3'
 // @todo make this configurable in the settings for remote matrix. This is current #r4radiotest123:matrix.org
 const MATRIX_TEST_ROOM_ID = '!aGwogbKehPpaWCGFIf:matrix.org'
 
+const DB_FILENAME = 'mydb2.sqlite3'
+
 // This worker shows using SQLite3 in a worker thread via OPFS.
 let globalDb
 
@@ -20,11 +22,23 @@ const dbPromise = (async () => {
 		return globalDb
 	}
 	const sqlite = await sqlite3InitModule({print: console.log, printErr: console.error})
-	const db = openDb(sqlite)
-	await db.exec(schema)
 	console.log(`Loaded sqlite-wasm ${sqlite.version.libVersion} and ran our schema`)
 	globalDb = db
-	return db
+	const db = openDb(sqlite)
+	await db.exec(schema)
+	console.log(`Loaded SQLite ${sqlite.version.libVersion} and ran our schema`)
+	const rows = db.selectArray('select count(id) from employees')
+	console.log('test query', rows)
+
+	globalDb = openDb(sqlite)
+	await globalDb.exec(schema)
+	console.log(`Loaded SQLite ${sqlite.version.libVersion} and ran our schema`)
+
+	const employees = globalDb.selectArray('select count(id) from employees')[0]
+	const tracks = globalDb.selectArray('select count(id) from tracks')[0]
+	console.log('test query', {employees, tracks})
+
+	return globalDb
 })()
 
 function openDb(sqlite3, filename = DATABASE_FILENAME) {
@@ -76,7 +90,7 @@ async function deleteAll() {
 		console.log(err)
 		console.error(err)
 	}
-}	
+}
 
 async function getSettings() {
 	const db = await getDb()

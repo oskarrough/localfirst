@@ -33,6 +33,7 @@ function component({roomId, roomAlias}) {
 
 	return html`<host>
 		<h3>Matrix controls</h3>
+		<p><label>Room ID (readonly for now) <input readonly value=${roomId} /></label></p>
 		<menu>
 			<button onclick=${join}>Join room</button>
 			<button onclick=${read}>Preview room tracks</button>

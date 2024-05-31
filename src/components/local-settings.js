@@ -6,17 +6,19 @@ async function pull() {
 }
 
 async function deleteAll() {
+	// await worker.exec('delete from channels')
 	await worker.deleteAll()
+	console.log('deleted all channels')
 }
 
 // https://web.dev/origin-private-file-system/#accessing-existing-files-and-folders
 async function getDatabaseFile() {
 	try {
 		const opfsRoot = await navigator.storage.getDirectory()
-		// Name has to match the one in worker2.js
-		const fileHandle = await opfsRoot.getFileHandle('mydb.sqlite3')
+		// Name has to match the one in worker.js
+		const fileHandle = await opfsRoot.getFileHandle('mydb2.sqlite3')
 		const fileData = await fileHandle.getFile()
-		const handle = await showSaveFilePicker({
+		const handle = await window.showSaveFilePicker({
 			suggestedName: fileData.name,
 		})
 		const writable = await handle.createWritable()

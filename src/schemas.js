@@ -9,7 +9,7 @@ create table if not exists channels(id primary key, name, slug unique, created_a
 create table if not exists tracks(id primary key, slug not null, url, title, description, created_at, updated_at, foreign key(slug) references channels(slug) on delete cascade);
 
 create table if not exists settings(id primary key, provider_r4 integer, provider_matrix integer);
-insert or ignore into settings (id, provider_r4, provider_matrix) values (1, 1, 0);
+insert or ignore into settings (id, provider_r4, provider_matrix) values (1, 0, 0);
 
 --select crsql_as_crr('channels');
 --select crsql_as_crr('tracks');
@@ -36,4 +36,3 @@ export const TrackSchema = z.object({
 	created_at: z.string(), //.datetime(),
 	updated_at: z.string().optional(), //
 })
-

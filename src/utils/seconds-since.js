@@ -1,5 +1,4 @@
 /**
- *
  * @param {number} startMs
  * @returns {string}
  */
