@@ -6,18 +6,22 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint src"
   },
   "dependencies": {
     "@atomico/router": "^2.0.1",
+    "@eslint/js": "^9.3.0",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@radio4000/components": "^0.2.2",
     "@radio4000/sdk": "^0.4.11",
     "@sctlib/mwc": "^0.3.0",
-    "@sqlite.org/sqlite-wasm": "^3.42.0-build6",
-    "@vlcn.io/crsqlite-wasm": "^0.14.0",
-    "@vlcn.io/rx-tbl": "^0.13.0",
+    "@sqlite.org/sqlite-wasm": "^3.45.3-build3",
+    "@vlcn.io/crsqlite-wasm": "^0.16.0",
+    "@vlcn.io/rx-tbl": "^0.15.0",
     "atomico": "^1.79.2",
     "comlink": "^4.4.1",
+    "eslint-plugin-unicorn": "^53.0.0",
     "lit": "^3.1.3",
     "matrix-js-sdk": "^32.4.0",
     "nanoid": "^5.0.7",
@@ -27,13 +31,7 @@
   "devDependencies": {
     "@atomico/vite": "^2.20.0",
     "eslint": "^9.3.0",
+    "globals": "^15.3.0",
     "vite": "^5.2.11"
-  },
-  "prettier": {
-    "bracketSpacing": false,
-    "singleQuote": true,
-    "semi": false,
-    "useTabs": true,
-    "printWidth": 120
   }
 }

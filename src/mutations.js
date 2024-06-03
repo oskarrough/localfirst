@@ -6,6 +6,12 @@ import {ChannelSchema, TrackSchema} from './schemas.js'
 /** @typedef {import('./schemas.js').Channel} Channel */
 /** @typedef {import('./schemas.js').Track} Track */
 
+// const addTrack = defineMutation(
+// 	'addTrack',
+// 	TrackSchema,
+// 	sql`insert into tracks (id, title, url) VALUES ($id, $title, $url)`
+// )
+
 /** Upserts a list of (valid) channels to the local database
  * @param {Array<Channel>} data
  */
