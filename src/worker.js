@@ -5,33 +5,29 @@ import R4Remote from './remotes/r4.js'
 import MatrixRemote from './remotes/matrix.js'
 import {secondsSince} from './utils/seconds-since.js'
 
+const DATABASE_FILENAME = '/mydb.sqlite3'
+
+// @todo make this configurable in the settings for remote matrix. This is current #r4radiotest123:matrix.org
 const MATRIX_TEST_ROOM_ID = '!aGwogbKehPpaWCGFIf:matrix.org'
 
 // This worker shows using SQLite3 in a worker thread via OPFS.
 let globalDb
 
-// @todo make this configurable in the settings for remote matrix. This is current #r4radiotest123:matrix.org
-const ROOM_ID = '!aGwogbKehPpaWCGFIf:matrix.org'
-
 // Immediately executed, singleton promise that resolves to the same database connection.
 const dbPromise = (async () => {
 	if (globalDb) {
-		console.log('reusing "globalDb" SQLite connection')
+		console.log('reusing sqlite-wasm connection')
 		return globalDb
 	}
 	const sqlite = await sqlite3InitModule({print: console.log, printErr: console.error})
 	const db = openDb(sqlite)
 	await db.exec(schema)
-	console.log(`Loaded SQLite ${sqlite.version.libVersion} and ran our schema`)
-
-	const rows = db.selectArray('select count(id) from employees')
-	console.log('test query', rows)
-
+	console.log(`Loaded sqlite-wasm ${sqlite.version.libVersion} and ran our schema`)
 	globalDb = db
 	return db
 })()
 
-function openDb(sqlite3, filename = '/mydb.sqlite3') {
+function openDb(sqlite3, filename = DATABASE_FILENAME) {
 	const db = 'opfs' in sqlite3 ? new sqlite3.oo1.OpfsDb(filename) : new sqlite3.oo1.DB(filename, 'ct')
 	'opfs' in sqlite3
 		? console.log('OPFS is available, created persisted database at', db.filename)
