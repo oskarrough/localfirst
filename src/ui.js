@@ -59,16 +59,32 @@ function LocalFirst() {
 	const settings = promise.result
 
 	return html`<host>
-		<p>Hello local first world. In this prototype you manage your data local first. <visit-counter></visit-counter>.</p>
+		<h2>Local-First</h2>
+		<p>
+			This is an experiment in local-first software. When you visit this for the first time, a fresh SQLite database is
+			created in your browser.
+		</p>
 
-		<details open>
-			<summary>Remotes</summary>
-			<p>Optionally sync your local data with remote services.</p>
-			<form onchange=${setRemotes}>
+		<hr />
+
+		<h2>Remotes</h2>
+		<p>
+			The system has the concept of a <em>remote</em>. Remotes are external services that define pull+push methods that
+			serialize to the Radio4000 schema. Currently two remotes are supported: Radio4000 and Matrix.
+		</p>
+		<form onchange=${setRemotes}>
+			<fieldset>
+				<legend>Enabled remotes</legend>
 				<label><input checked=${settings.provider_matrix} type="checkbox" name="matrix" /> Matrix room</label>
 				<label><input checked=${settings.provider_r4} type="checkbox" name="r4" /> Radio4000</label>
-			</form>
+			</fieldset>
+		</form>
 
+		<h2>Local database</h2>
+		<p>Sync your local database with the remote services.</p>
+		<local-settings></local-settings>
+
+		<details open>
 			<h2>Matrix remote</h2>
 			<matrix-auth show-guest="true" show-user="true">
 				<div slot="logged-in">You're signed in as registered matrix user.</div>
@@ -87,8 +103,6 @@ function LocalFirst() {
 			<h2>Radio4000 remote</h2>
 			<p>@todo</p>
 		</details>
-
-		<local-settings></local-settings>
 
 		<h2>Local Channels</h2>
 		<r4-local-channels></r4-local-channels>

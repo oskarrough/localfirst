@@ -39,9 +39,7 @@ function openDb(sqlite3, filename = '/mydb.sqlite3') {
 	return db
 }
 
-// Ensure we only open the database once
 export async function getDb() {
-	// console.log('getDb')
 	return dbPromise
 }
 
@@ -64,7 +62,6 @@ async function pull() {
 	const remotes = []
 	if (settings.provider_r4) remotes.push(new R4Remote(db))
 	if (settings.provider_matrix) remotes.push(new MatrixRemote(db, {roomId: MATRIX_TEST_ROOM_ID}))
-	console.log('new remotes?', db)
 	// await db.exec('begin transaction')
 	await Promise.all(remotes.map((r) => r.pull()))
 	// await db.exec('commit')
@@ -72,12 +69,10 @@ async function pull() {
 }
 
 async function deleteAll() {
-	await (await getDb()).exec('delete from settings; delete from channels; delete from tracks;')
-	console.log('worker: deleted settings, channels and tracks')
 	try {
-		await (await getDb()).exec('delete from settings; delete from channels; delete from tracks;')
 		const db = await getDb()
-		console.log('worker: dumped')
+		await db.exec('delete from employees; delete from settings; delete from channels; delete from tracks;')
+		console.log('deleted settings, channels and tracks')
 		const what = await db.selectObjects('select * from channels;')
 		console.log(what)
 	} catch (err) {
