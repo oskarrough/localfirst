@@ -9,10 +9,5 @@ export function MagicWorker(file) {
 export var worker = MagicWorker('worker.js')
 // export const testWorker = new MagicWorker('worker-test.js')
 
-async function what() {
-  // console.log(`testworker ${await testWorker.counter}`)
-  console.log('worker what', (await worker.query('select name from employees limit 1')))
-}
-
 console.log('DEBUG TIP: Access the worker on window.localfirstworker')
 window.localfirstworker = worker
