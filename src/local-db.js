@@ -2,18 +2,22 @@ import sqliteWasm from '@vlcn.io/crsqlite-wasm'
 import wasmUrl from '@vlcn.io/crsqlite-wasm/crsqlite.wasm?url'
 import {schema} from './schemas.js'
 
-// Singleton promise.
 let globalDb
 const dbPromise = (async () => {
 	if (globalDb) {
-		console.log('reusing cr-sqlite connection')
+		console.log('Reusing cr-sqlite connection')
 		return globalDb
 	}
-	const sqlite = await sqliteWasm(() => wasmUrl)
-	const db = await sqlite.open('my.db')
-	await db.exec(schema)
-	console.log('opened cr-sqlite and ran schema')
-	return db
+	try {
+		const sqlite = await sqliteWasm(() => wasmUrl)
+		globalDb = await sqlite.open('mysupernice.db')
+		await globalDb.exec(schema)
+		console.log('Opened cr-sqlite and ran schema')
+		return globalDb
+	} catch (error) {
+		console.error('Error initializing cr-sqlite', error)
+		throw error
+	}
 })()
 
 // Ensure we only open the database once

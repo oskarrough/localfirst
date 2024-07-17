@@ -5,12 +5,10 @@ import R4Remote from './remotes/r4.js'
 import MatrixRemote from './remotes/matrix.js'
 import {secondsSince} from './utils/seconds-since.js'
 
-const DATABASE_FILENAME = '/mydb.sqlite3'
+const DATABASE_FILENAME = '/mydb2.sqlite3'
 
 // @todo make this configurable in the settings for remote matrix. This is current #r4radiotest123:matrix.org
 const MATRIX_TEST_ROOM_ID = '!aGwogbKehPpaWCGFIf:matrix.org'
-
-const DB_FILENAME = 'mydb2.sqlite3'
 
 // This worker shows using SQLite3 in a worker thread via OPFS.
 let globalDb
@@ -21,23 +19,16 @@ const dbPromise = (async () => {
 		console.log('reusing sqlite-wasm connection')
 		return globalDb
 	}
+	// Set up and schema.
 	const sqlite = await sqlite3InitModule({print: console.log, printErr: console.error})
-	console.log(`Loaded sqlite-wasm ${sqlite.version.libVersion} and ran our schema`)
-	globalDb = db
-	const db = openDb(sqlite)
-	await db.exec(schema)
-	console.log(`Loaded SQLite ${sqlite.version.libVersion} and ran our schema`)
-	const rows = db.selectArray('select count(id) from employees')
-	console.log('test query', rows)
-
 	globalDb = openDb(sqlite)
 	await globalDb.exec(schema)
-	console.log(`Loaded SQLite ${sqlite.version.libVersion} and ran our schema`)
-
+	console.log(`Opened sqlite-wasm ${sqlite.version.libVersion} and ran our schema`)
+	// Test queries
 	const employees = globalDb.selectArray('select count(id) from employees')[0]
 	const tracks = globalDb.selectArray('select count(id) from tracks')[0]
 	console.log('test query', {employees, tracks})
-
+	// Return the connection
 	return globalDb
 })()
 

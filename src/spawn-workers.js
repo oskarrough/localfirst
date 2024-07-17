@@ -1,14 +1,9 @@
 import * as Comlink from 'comlink'
 
-export let worker
-
-function setup() {
-	worker = MagicWorker('worker.js')
-}
-setup()
+export let worker = MagicWorker('worker.js')
 
 function MagicWorker(file) {
-	console.log('RANRAN')
+	console.log('Creating magic worker')
 	const worker = new Worker(new URL(file, import.meta.url), {type: 'module'})
 	return Comlink.wrap(worker)
 }
@@ -17,6 +12,6 @@ function MagicWorker(file) {
 // export var worker = MagicWorker('worker.js')
 
 if (typeof window !== 'undefined') {
-	console.log('DEBUG TIP: Access the worker on window.localfirstworker')
 	window.localfirstworker = worker
+	console.log('DEBUG TIP: Access the worker on window.localfirstworker')
 }
