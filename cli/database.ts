@@ -1,6 +1,6 @@
 import {Database} from 'bun:sqlite'
 import type {Track, SQLTrack} from './schema'
-import {TrackTableSQLSchema, SQLTrackSchema} from './schema'
+import {tracksTable, SQLTrackSchema} from './schema'
 import {localTrackToTrack, trackToLocalTrack} from './utils'
 
 /** Set up (or reuse) a local sqlite database */
@@ -9,7 +9,7 @@ export async function setupDatabase(filename: string) {
 		strict: true,
 	})
 	db.exec('PRAGMA journal_mode = WAL;')
-	db.run(TrackTableSQLSchema)
+	db.run(tracksTable)
 	return db
 }
 

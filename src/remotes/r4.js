@@ -20,7 +20,7 @@ export default class R4Remote extends Remote {
 
 		if (!db) throw new Error('@todo db is undefined here after switching workers')
 
-		/** @type {Array<import('../schemas.js').Channel>} */
+		/** @type {Array<import('../../cli/schema.ts').Channel>} */
 		const channels = await db.selectObjects('select * from channels')
     console.log('local channels', channels)
 
