@@ -12,7 +12,7 @@ import {
 	SortingFn,
 } from '@tanstack/react-table'
 import {RankingInfo, rankItem, compareItems} from '@tanstack/match-sorter-utils'
-import type {Track} from '../../cli/schema'
+import type {Track} from '../../src/cli/schema'
 
 declare module '@tanstack/react-table' {
 	//add fuzzy filter to the filterFns

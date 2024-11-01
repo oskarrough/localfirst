@@ -1,13 +1,13 @@
 import {getDb} from './db-crsqlite.js'
-import {ChannelSchema, TrackSchema} from '../cli/schema'
+import {ChannelSchema, TrackSchema} from './cli/schema.js'
 import R4Remote from './remotes/r4.js'
 import MatrixRemote from './remotes/matrix.js'
 import {secondsSince} from './utils/seconds-since.js'
 
 /** The idea with this file is to have a method for every mutation we need on the local database. */
 
-/** @typedef {import('../cli/schema.ts').Channel} Channel */
-/** @typedef {import('../cli/schema.ts').Track} Track */
+/** @typedef {import('./cli/schema.js').Channel} Channel */
+/** @typedef {import('./cli/schema.js').Track} Track */
 
 /** Upserts a list of (valid) channels to the local database
  * @param {Array<Channel>} data

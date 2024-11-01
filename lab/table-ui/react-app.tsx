@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import {createBackup} from '../../cli/utils.js'
+import {createBackup} from '../../src/cli/utils.js'
 // import {hello} from './sqlite-browser.js'
 import TheTable from './the-table'
 import './index.css'

@@ -121,6 +121,9 @@ function nicerZodError(t: any, err: unknown) {
 	}
 }
 
+/** Parses a track and adds two props to id: provider + providerId
+ * @todo should it modify or return a new object?
+ */
 export function addProviderInfo(track: Track) {
 	const {provider, id: providerId} = mediaUrlParser(track.url)
 	track.provider = provider
