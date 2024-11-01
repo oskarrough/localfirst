@@ -9,10 +9,11 @@ import './components/r4-tracks.js'
 import './components/r4-matrix.js'
 import './components/local-settings.js'
 
-import {worker} from './spawn-workers.js'
+// import {worker} from './spawn-workers.js'
 
 async function getSettings() {
-	return (await worker.query('select * from settings where id = 1'))[0]
+	console.log('@todo')
+	// return (await worker.query('select * from settings where id = 1'))[0]
 }
 
 const setRemotes = async (event) => {
@@ -98,7 +99,6 @@ customElements.define('local-first', c(LocalFirst))
 
 // async function what() {
 // 	// console.log(`testworker2 ${await testWorker.counter}`)
-// 	console.log('worker test, select 10 employees', await worker.query('select name from employees limit 10'))
 // }
 // setTimeout(what, 1000)
 
