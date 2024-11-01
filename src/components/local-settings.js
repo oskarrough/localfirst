@@ -1,5 +1,5 @@
 import {c, html} from 'atomico'
-import {worker} from '../spawn-workers.js'
+// import {worker} from '../spawn-workers.js'
 
 async function pull() {
 	await worker.pull()

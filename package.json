@@ -26,6 +26,7 @@
     "nanoid": "^5.0.7",
     "p-limit": "^6.1.0",
     "simple-datatables": "^9.0.4",
+    "wa-sqlite": "^1.0.0",
     "y-indexeddb": "^9.0.12",
     "y-webrtc": "^10.3.0",
     "y-websocket": "^2.0.3",

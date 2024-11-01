@@ -1,6 +1,6 @@
 import {c, html, usePromise, useRef, useEffect} from 'atomico'
 import {DataTable} from 'simple-datatables'
-import {getDb} from '../local-db.js'
+import {getDb} from '../db-crsqlite.js'
 import humanizedDate from '../utils/humanized-date.js'
 
 // Note, we use execA to get an array of columns, not objects.

@@ -53,3 +53,5 @@ To render a table without much work we can use this
 Other interesting projects using databases in browser
 
 - https://github.com/nalgeon/sqlime
+
+https://sqlite.org/wasm/doc/trunk/cookbook.md
