@@ -1,4 +1,4 @@
-import { useState, memo, useMemo } from 'react'
+import {useState, memo, useMemo} from 'react'
 import {
 	FilterFn,
 	createColumnHelper,
@@ -9,10 +9,10 @@ import {
 	sortingFns,
 	useReactTable,
 	Table,
-    SortingFn,
+	SortingFn,
 } from '@tanstack/react-table'
-import { RankingInfo, rankItem, compareItems } from '@tanstack/match-sorter-utils'
-import type { Track } from './schema'
+import {RankingInfo, rankItem, compareItems} from '@tanstack/match-sorter-utils'
+import type {Track} from '../../cli/schema'
 
 declare module '@tanstack/react-table' {
 	//add fuzzy filter to the filterFns
@@ -25,7 +25,7 @@ declare module '@tanstack/react-table' {
 }
 
 // Date formatting
-const shortFormatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+const shortFormatter = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: 'short', day: 'numeric'})
 const longFormatter = new Intl.DateTimeFormat('en-US', {
 	year: 'numeric',
 	month: 'long',
@@ -64,7 +64,7 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 
 const columnHelper = createColumnHelper<Track>()
 
-function TheTable(props) {
+export default function TheTable(props) {
 	// console.log('props', props.store.tracks)
 	const [data, _setData] = useState(() => [...props.store.tracks])
 	const [sorting, setSorting] = useState<SortingState>([
@@ -87,7 +87,7 @@ function TheTable(props) {
 			})
 		})
 		return Object.entries(tagCounts)
-			.map(([tag, count]) => ({ tag, count }))
+			.map(([tag, count]) => ({tag, count}))
 			.sort((a, b) => a.tag.localeCompare(b.tag))
 	}, [data])
 
@@ -95,7 +95,7 @@ function TheTable(props) {
 		() => [
 			{
 				id: 'actions',
-				header: ({ table }) => (
+				header: ({table}) => (
 					<input
 						type="checkbox"
 						name="toggleAllRowsSelected"
@@ -104,7 +104,7 @@ function TheTable(props) {
 						onChange={table.getToggleAllRowsSelectedHandler()} //or getToggleAllPageRowsSelectedHandler
 					/>
 				),
-				cell: ({ row }) => (
+				cell: ({row}) => (
 					<input
 						type="checkbox"
 						name={row.id}
@@ -184,7 +184,7 @@ function TheTable(props) {
 				footer: (info) => info.column.id,
 			}),
 		],
-		[],
+		[]
 	)
 
 	const table = useReactTable({
@@ -238,7 +238,7 @@ function TheTable(props) {
 	 */
 	const columnSizeVars = useMemo(() => {
 		const headers = table.getFlatHeaders()
-		const colSizes: { [key: string]: number } = {}
+		const colSizes: {[key: string]: number} = {}
 		for (let i = 0; i < headers.length; i++) {
 			const header = headers[i]!
 			colSizes[`--header-${header.id}-size`] = header.getSize()
@@ -338,13 +338,13 @@ function TheTable(props) {
 			<pre>{JSON.stringify(sorting, null, 2)}</pre>
 
 			<h3>Column sizing</h3>
-			<pre style={{ minHeight: '8rem' }}>
+			<pre style={{minHeight: '8rem'}}>
 				{JSON.stringify(
 					{
 						columnSizing: table.getState().columnSizing,
 					},
 					null,
-					2,
+					2
 				)}
 			</pre>
 
@@ -377,8 +377,8 @@ function TheTable(props) {
 											? header.column.getNextSortingOrder() === 'asc'
 												? 'Sort ascending'
 												: header.column.getNextSortingOrder() === 'desc'
-													? 'Sort descending'
-													: 'Clear sort'
+												? 'Sort descending'
+												: 'Clear sort'
 											: undefined
 									}
 								>
@@ -424,7 +424,7 @@ function TheTable(props) {
 	)
 }
 
-function TableBody({ table }: { table: Table<Track> }) {
+function TableBody({table}: {table: Table<Track>}) {
 	return (
 		<tbody>
 			{table.getRowModel().rows.map((row) => (
@@ -448,7 +448,5 @@ function TableBody({ table }: { table: Table<Track> }) {
 // special memoized wrapper for our table body that we will use during column resizing
 const MemoizedTableBody = memo(
 	TableBody,
-	(prev, next) => prev.table.options.data === next.table.options.data,
+	(prev, next) => prev.table.options.data === next.table.options.data
 ) as typeof TableBody
-
-export default TheTable

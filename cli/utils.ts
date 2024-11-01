@@ -120,3 +120,10 @@ function nicerZodError(t: any, err: unknown) {
 		})
 	}
 }
+
+export function addProviderInfo(track: Track) {
+	const {provider, id: providerId} = mediaUrlParser(track.url)
+	track.provider = provider
+	track.providerId = providerId
+	return track
+}

@@ -5,12 +5,12 @@ import {z} from 'zod'
   Why are they different, you might ask. Good question.
 
   - SQLite and PostgreSQL aren't compatible, sqlite has no string[] column, for example.
-  - Remote schemas are different from local schemas, we want to be able to go from any schema to any schema
+  - Remote schemas will be different to our local schema. We want to be able to serialize any schema 
 
   Another reason is that it's good exercise to handle different schemas. I'd also want to sync to Matrix, not just Radio4000 v2.
 
-  SQLTrack = for storing in the local SQLite database
   Track = for use in the app
+  SQLTrack = for storing in the local SQLite database
   R4Track = for fetching from the remote Radio4000 v2 API
   MatrixTrack = for syncing to Matrix
 */
