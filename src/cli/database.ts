@@ -13,6 +13,7 @@ export async function setupDatabase(filename: string) {
 	return db
 }
 
+/** Returns all tracks from the local sqlite */
 export function getTracks(db: Database): Track[] {
 	const query = db.query(`select * from tracks`)
 	const localTracks = query.all() as SQLTrack[]
@@ -20,9 +21,13 @@ export function getTracks(db: Database): Track[] {
 	return tracks
 }
 
+/** Returns a sqlite query you can use with .run(track) */
 const upsertTrackQuery = (db: Database) =>
 	db.query(
-		`INSERT OR REPLACE INTO tracks (id, slug, createdAt, updatedAt, title, url, discogsUrl, description, tags, mentions, provider, providerId, files, lastError) VALUES ($id, $slug, $createdAt, $updatedAt, $title, $url, $discogsUrl, $description, $tags, $mentions, $provider, $providerId, $files, $lastError);`,
+		`INSERT OR REPLACE INTO tracks 
+		(id, slug, createdAt, updatedAt, title, url, discogsUrl, description, tags, mentions, provider, providerId, files, lastError)
+		VALUES
+		($id, $slug, $createdAt, $updatedAt, $title, $url, $discogsUrl, $description, $tags, $mentions, $provider, $providerId, $files, $lastError);`
 	)
 
 /** Throws if it cant upsert */

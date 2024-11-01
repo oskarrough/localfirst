@@ -4,7 +4,7 @@ import {initializeSqlite} from './db-sqlite'
 
 // Do not put async stuff at the top level!
 
-console.log('worker', Date.now())
+console.log('worker.js', Date.now())
 
 const testSql = `
 CREATE TABLE IF NOT EXISTS t(x PRIMARY KEY, y);
@@ -13,7 +13,7 @@ SELECT * FROM t;
 `.trim()
 
 async function hey() {
-	console.log('hey')
+	console.log('worker.js hey')
 	const db = await initializeSqlite()
 	await db.exec(testSql)
 	const results = await db.selectObjects('select * from t;')

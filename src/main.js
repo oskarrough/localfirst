@@ -5,7 +5,9 @@
 // import { init } from './spawn-workers.js'
 
 import * as Comlink from 'comlink'
-// import './ui.js'
+
+// @todo enable this again
+import './ui.js'
 
 console.log('main thread', Date.now())
 
@@ -28,7 +30,7 @@ async function wrap(worker) {
 					resolve()
 				}
 			},
-			{signal: controller.signal},
+			{signal: controller.signal}
 		)
 	})
 	return Comlink.wrap(worker)

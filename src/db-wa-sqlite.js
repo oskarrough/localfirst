@@ -1,4 +1,4 @@
-import {channelsTable, tracksTable, settingsTable, testTables} from '../cli/schema'
+import {channelsTable, tracksTable, settingsTable, testTables} from './cli/schema'
 
 const dbName = 'test-wasqlite.sqlite3'
 

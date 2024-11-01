@@ -1,6 +1,6 @@
 import matrix from '@sctlib/mwc/api'
 
-/** @typedef {import('../../cli/schema.ts').Track} Track */
+/** @typedef {import('../cli/schema.js').Track} Track */
 
 // A custom event type for our track events in Matrix
 const EVENT_TYPE_TRACK = 'org.r4.track'

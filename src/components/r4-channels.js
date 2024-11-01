@@ -24,7 +24,7 @@ customElements.define('r4-local-channels', c(component))
 
 /**
  * @param {HTMLTableElement} tableElement
- * @param {import('../../cli/schema.ts').Channel[]} rows
+ * @param {import('../cli/schema.js').Channel[]} rows
  */
 function createTable(tableElement, rows) {
 	return new DataTable(tableElement, {

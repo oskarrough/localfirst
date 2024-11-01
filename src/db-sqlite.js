@@ -1,5 +1,5 @@
 import sqlite3InitModule from '@sqlite.org/sqlite-wasm'
-import {channelsTable, tracksTable, settingsTable, testTables} from '../cli/schema'
+import {channelsTable, tracksTable, settingsTable, testTables} from './cli/schema'
 
 // SQLite in the browser via WASM and sqlite-wasm
 // console.error('dont use')
