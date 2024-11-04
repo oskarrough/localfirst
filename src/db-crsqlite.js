@@ -1,4 +1,4 @@
-import {channelsTable, tracksTable, settingsTable, testTables} from '../cli/schema'
+import {channelsTable, tracksTable, settingsTable, testTables} from './cli/schema'
 import sqliteWasm from '@vlcn.io/crsqlite-wasm'
 import wasmUrl from '@vlcn.io/crsqlite-wasm/crsqlite.wasm?url'
 

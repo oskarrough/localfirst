@@ -55,3 +55,10 @@ Other interesting projects using databases in browser
 - https://github.com/nalgeon/sqlime
 
 https://sqlite.org/wasm/doc/trunk/cookbook.md
+
+
+## CLI
+
+```
+bun src/cli.ts --slug oskar --folder /mnt/d/Dropbox/Music/Radios --dry-run --download  
+```
